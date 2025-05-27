@@ -1,0 +1,67 @@
+-- Criando banco de dados de uma loja virtual das frutas de One Piece
+
+-- Criando estrutura tabela das akuma no mi (frutas)
+CREATE TABLE produtos (
+id INT PRIMARY KEY,
+fruta VARCHAR(50),
+preco INT
+);
+
+-- inserindo dados na tabela
+
+INSERT INTO produtos(id, fruta, preco)
+VALUES 
+(101, 'gura-gura no mi', 100),
+(102, 'gomu-gomu no mi', 900),
+(103, 'nikyu-nikyu no mi', 600),
+(104, 'zushi-zushi no mi', 300);
+
+-- Mostrar os produtos inseridos
+
+SELECT * FROM produtos;
+
+-- Criar uma tabela de clientes
+CREATE TABLE clientes(
+id INT PRIMARY KEY,
+usuario VARCHAR(50),
+fruta VARCHAR(100),
+data_nascimento DATE
+);
+
+INSERT INTO clientes(id, usuario, fruta, data_nascimento)
+VALUES
+(201, 'Edward Newgate', 'Gura-Gura no mi', '2000-1-1'),
+(202, 'Luffy', 'Gomu-Gomu no mi', '2000-1-1'),
+(203, 'Bartolomeu Kuma', 'Nikyu-Nikyu no mi', '2000-1-1'),
+(204, 'Fujitora', 'Zushi-Zushi no mi', '2000-1-1');
+
+
+SELECT * FROM clientes;
+
+-- Criar tabela de venda com os usuários de cada fruta
+CREATE TABLE vendas(
+id INT AUTO_INCREMENT PRIMARY KEY,
+id_cliente INT,
+id_produto INT,
+data DATE,
+FOREIGN KEY (id_cliente) REFERENCES clientes(id),
+FOREIGN KEY (id_produto) REFERENCES produtos(id)
+
+);
+
+
+INSERT INTO vendas(id_cliente, id_produto, data)
+VALUES
+(201, 101, '2025-10-10'),
+(202, 102, '2025-10-10'),
+(203, 103, '2025-10-10'),
+(204, 104, '2025-10-10');
+
+SELECT * FROM vendas;
+
+SELECT * FROM vendas
+JOIN clientes
+ON vendas.id_cliente=clientes.id
+JOIN produtos
+ON vendas.id_produto=produtos.id;
+

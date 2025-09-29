@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EduBlaze • Minicasino Educacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d12;
+    --panel:#111626;
+    --panel-2:#0d1320;
+    --primary:#ff2a5a;
+    --accent:#9a6cff;
+    --accent-2:#1ee3cf;
+    --text:#e9edf5;
+    --muted:#9aa6c2;
+    --win:#20d27d;
+    --loss:#ff4d6d;
+
+    --radius:16px;
+    --shadow:0 20px 40px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:radial-gradient(1200px 600px at 80% -10%, #1b2445 0%, rgba(27,36,69,0) 60%),linear-gradient(180deg, #0b0d12 0%, #090b10 100%);color:var(--text);font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  a{text-decoration:none;color:inherit}
+  button{font:inherit}
+  input,select{font:inherit;color:inherit}
+
+  /* Header */
+  header{
+    position:sticky;top:0;z-index:30;
+    background:linear-gradient(180deg, rgba(12,15,24,.9), rgba(12,15,24,.7));
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:16px;padding:14px 18px;max-width:1200px;margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.5px}
+  .logo{
+    width:32px;height:32px;border-radius:9px;display:grid;place-items:center;
+    background:conic-gradient(from 120deg, var(--primary), #ff8aa3, var(--accent), #59f2d7, var(--primary));
+    animation:spin 6s linear infinite;filter:saturate(1.2);box-shadow:0 0 24px rgba(255,42,90,.35) inset, 0 0 18px rgba(154,108,255,.3);
+  }
+  @keyframes spin {to{transform:rotate(360deg)}}
+  .pill{
+    background:linear-gradient(180deg, #141a2e, #0c1120);
+    border:1px solid rgba(255,255,255,.06);
+    padding:8px 12px;border-radius:999px;display:flex;align-items:center;gap:12px;
+  }
+  .btn, .btn-ghost{
+    border:none;border-radius:12px;padding:12px 14px;background:linear-gradient(180deg, #ff2a5a, #ef1752);
+    color:white;font-weight:700;cursor:pointer;transition:.2s; box-shadow:0 10px 24px rgba(255,42,90,.25);
+  }
+  .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+  .btn:disabled{opacity:.6;cursor:not-allowed;filter:none}
+  .btn-ghost{
+    background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--text);box-shadow:none
+  }
+  .chip{
+    padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg, #13192d, #0c1222);cursor:pointer;font-weight:600
+  }
+  .chip.active{border-color:var(--primary); box-shadow:0 0 0 2px rgba(255,42,90,.2) inset; color:#fff}
+
+  /* Tabs jogos */
+  .tabs{
+    max-width:1200px;margin:12px auto 0;padding:0 18px 12px;display:flex;gap:8px;overflow:auto
+  }
+  .tab{
+    white-space:nowrap;padding:10px 12px;border-radius:10px;background:linear-gradient(180deg, #13192d, #0c1222);
+    border:1px solid rgba(255,255,255,.06);color:var(--muted);cursor:pointer;font-weight:600
+  }
+  .tab.active{color:#fff;border-color:rgba(255,255,255,.16);box-shadow:0 0 0 2px rgba(154,108,255,.18) inset}
+
+  main{max-width:1200px;margin:0 auto;padding:18px}
+  .panel{
+    background:linear-gradient(180deg, #0f1424, #0b1020);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px;margin-bottom:18px;
+  }
+  .game{
+    display:grid;grid-template-columns:400px 1fr;gap:18px;
+  }
+  .col{
+    background:linear-gradient(180deg, #121833, #0d1326);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:14px;padding:14px;min-height:300px
+  }
+  .title{font-weight:800;font-size:18px;margin-bottom:10px}
+  .muted{color:var(--muted);font-size:14px}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .field{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+  input[type="number"], input[type="text"], input[type="range"], select{
+    background:#0b1020;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;color:#fff;outline:none
+  }
+  input[type="range"]{width:100%}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .divider{height:1px;background:linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);margin:12px 0}
+
+  /* Visuals comuns */
+  .visual{
+    background:linear-gradient(180deg, #0a101e, #0a0f1a);
+    border:1px dashed rgba(255,255,255,.08);
+    border-radius:12px;height:360px;display:grid;place-items:center;overflow:hidden;position:relative
+  }
+  .flash-win{box-shadow:inset 0 0 0 100vmax rgba(32,210,125,.08)}
+  .flash-lose{box-shadow:inset 0 0 0 100vmax rgba(255,77,109,.08)}
+  .result{font-size:18px;font-weight:700;margin-top:6px}
+  .history{display:flex;gap:6px;flex-wrap:wrap}
+  .dot{width:16px;height:16px;border-radius:50%}
+  .dot.win{background:linear-gradient(180deg, #2fe68b, #18ba6a)}
+  .dot.lose{background:linear-gradient(180deg, #ff6b88, #ff2a5a)}
+
+  /* Jogos específicos */
+  /* Coin flip */
+  .coin{
+    width:140px;height:140px;border-radius:50%;
+    background:radial-gradient(60% 60% at 40% 40%, #ff6b88, #ff2a5a 65%, #7b1032 100%);
+    box-shadow:inset 0 4px 16px rgba(255,255,255,.2), inset 0 -8px 24px rgba(0,0,0,.4), 0 10px 40px rgba(255,42,90,.3);
+    display:grid;place-items:center;font-weight:900;letter-spacing:.5px;font-size:28px;color:white;
+    transform-style:preserve-3d;transform:translateZ(0);
+  }
+  .coin.flip{
+    animation:coinflip 1.2s cubic-bezier(.2,.7,.2,1) 1 forwards;
+  }
+  @keyframes coinflip{
+    0%{transform:rotateY(0deg)}
+    100%{transform:rotateY(1080deg)}
+  }
+
+  /* Dice bar */
+  .gauge{position:relative;width:100%;height:16px;border-radius:999px;background:#0a0f1a;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+  .gauge .fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg, #1ee3cf, #9a6cff);width:0%}
+  .gauge .marker{position:absolute;top:-6px;width:2px;height:28px;background:#fff;opacity:.7}
+  .roll-bubble{position:absolute;top:-30px;transform:translateX(-50%);padding:4px 6px;background:#0b1020;border:1px solid rgba(255,255,255,.12);border-radius:6px;font-size:12px}
+
+  /* Double wheel */
+  .wheel{
+    width:320px;height:320px;border-radius:50%;border:10px solid #0a0f1a;position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,.5), inset 0 0 60px rgba(255,255,255,.06)
+  }
+  .wheel .spinner{position:absolute;inset:0;border-radius:50%;transition:transform 3.5s cubic-bezier(.1,.9,0,1);will-change:transform}
+  .pointer{
+    position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+    width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:16px solid #fff;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))
+  }
+
+  /* Crash */
+  .crash-wrap{position:absolute;inset:0;padding:16px}
+  .crash-graph{position:absolute;left:16px;right:16px;bottom:28px;top:16px;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden}
+  .crash-line{position:absolute;left:0;bottom:0;height:2px;background:linear-gradient(90deg, #1ee3cf, #9a6cff);width:0}
+  .crash-mult{position:absolute;right:20px;top:16px;font-size:42px;font-weight:900;text-shadow:0 6px 20px rgba(0,0,0,.6)}
+  .crash-x{position:absolute;right:20px;bottom:8px;font-size:14px;color:var(--muted)}
+
+  /* Mines */
+  .grid{display:grid;grid-template-columns:repeat(5, 1fr);gap:8px}
+  .cell{
+    aspect-ratio:1;border-radius:10px;border:1px solid rgba(255,255,255,.08);display:grid;place-items:center;
+    background:linear-gradient(180deg, #10162a, #0b1121);cursor:pointer;font-weight:800;font-size:18px;
+    transition:.15s
+  }
+  .cell.revealed.safe{background:linear-gradient(180deg, #13273a, #0d2034);border-color:rgba(30,227,207,.25);color:#9adff7}
+  .cell.revealed.mine{background:linear-gradient(180deg, #311520, #240c14);border-color:rgba(255,77,109,.35);color:#ff8da1}
+  .panel-hint{font-size:13px;color:var(--muted)}
+
+  /* Plinko */
+  .plinko{position:relative;width:min(100%,340px);height:340px;margin:auto}
+  .peg{position:absolute;width:8px;height:8px;border-radius:50%;background:#6b78a8;opacity:.7}
+  .ball{position:absolute;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, #9a6cff);box-shadow:0 6px 18px rgba(154,108,255,.5)}
+  .bins{position:absolute;bottom:0;left:0;right:0;display:flex;gap:6px;justify-content:space-between;padding:0 4px}
+  .bin{flex:1;height:28px;border-radius:8px;background:linear-gradient(180deg, #0d1120, #0a0f1a);border:1px solid rgba(255,255,255,.08);display:grid;place-items:center;font-size:12px}
+
+  /* Wheel of Fortune */
+  .fortune{width:320px;height:320px;border-radius:50%;border:10px solid #0a0f1a;position:relative}
+  .fortune .disc{position:absolute;inset:0;border-radius:50%;transition:transform 3.8s cubic-bezier(.1,.9,0,1)}
+  .fortune-pointer{position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #fff}
+
+  /* Cards */
+  .card{
+    width:120px;height:170px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+    background:linear-gradient(180deg, #141a2e, #0c1120);display:grid;place-items:center;font-size:48px;font-weight:800;
+    transition:transform .4s; backface-visibility:hidden; position:relative; overflow:hidden
+  }
+  .card.flip{transform:rotateY(180deg)}
+  .card.small{width:90px;height:128px;font-size:32px}
+
+  /* Slots */
+  .slot{
+    width:320px;height:200px;border-radius:16px;border:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg, #0d1120, #0a0f1a);display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px;overflow:hidden;position:relative
+  }
+  .reel{position:relative;overflow:hidden;border-radius:10px;background:linear-gradient(180deg, #0f1528, #0b1121);border:1px solid rgba(255,255,255,.06)}
+  .strip{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;gap:10px;padding:8px;transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+  .sym{height:54px;border-radius:8px;background:linear-gradient(180deg, #131a33, #0d1326);display:grid;place-items:center;font-size:28px}
+
+  /* Responsive */
+  @media (max-width: 960px){
+    .game{grid-template-columns:1fr}
+    .visual{height:300px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>EduBlaze</div>
+    </div>
+
+    <div class="pill">
+      <span>Saldo:</span>
+      <strong id="balance">R$ 0,00</strong>
+      <button class="btn-ghost" id="faucet">+ R$ 1.000</button>
+      <button class="btn-ghost" id="reset">Zerar</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<main id="content">
+  <!-- Cara ou Coroa -->
+  <section class="panel game" data-game="coinflip" style="display:none">
+    <div class="col">
+      <div class="title">Cara ou Coroa</div>
+      <div class="muted">Escolha o lado, aposte e lance a moeda. Pagamento 1.95x.</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-coin" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-coin" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-coin" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-coin" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-coin">1/2</button>
+          <button class="chip" data-double="#bet-coin">x2</button>
+          <button class="chip" data-max="#bet-coin">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Lado</label>
+        <div class="row" id="coin-sides">
+          <button class="chip active" data-side="cara">Cara</button>
+          <button class="chip" data-side="coroa">Coroa</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-coin">Lançar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-coin"></div>
+      <div class="result" id="res-coin"></div>
+    </div>
+    <div class="col">
+      <div class="visual" id="viz-coin">
+        <div class="coin" id="coin">?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dice Under/Over -->
+  <section class="panel game" data-game="dice" style="display:none">
+    <div class="col">
+      <div class="title">Dice • Under / Over</div>
+      <div class="muted">Acerte se o resultado ficará abaixo ou acima do alvo. Casa 1%.</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-dice" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-dice" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-dice" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-dice" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-dice">1/2</button>
+          <button class="chip" data-double="#bet-dice">x2</button>
+          <button class="chip" data-max="#bet-dice">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Modo</label>
+        <div class="row" id="dice-mode">
+          <button class="chip active" data-mode="under">Under</button>
+          <button class="chip" data-mode="over">Over</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Alvo: <span id="dice-target-val">50</span></label>
+        <input type="range" id="dice-target" min="2" max="98" value="50" />
+        <div class="muted">Chance: <span id="dice-chance">49%</span> • Payout: <span id="dice-payout">2.02x</span></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-dice">Rolar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-dice"></div>
+      <div class="result" id="res-dice"></div>
+    </div>
+    <div class="col">
+      <div class="visual">
+        <div class="gauge" style="width:90%">
+          <div class="fill" id="dice-fill"></div>
+          <div class="marker" id="dice-marker"></div>
+          <div class="roll-bubble" id="dice-bubble">0.00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Double (estilo Blaze) -->
+  <section class="panel game" data-game="double" style="display:none">
+    <div class="col">
+      <div class="title">Double • Vermelho / Preto / Branco</div>
+      <div class="muted">Aposte na cor. Vermelho/Preto 2x • Branco 14x. (15R / 15P / 1B)</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-double" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-double" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-double" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-double" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-double">1/2</button>
+          <button class="chip" data-double="#bet-double">x2</button>
+          <button class="chip" data-max="#bet-double">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Cor</label>
+        <div class="row" id="double-colors">
+          <button class="chip active" data-color="red" style="color:#ff6b88">Vermelho</button>
+          <button class="chip" data-color="black" style="color:#a8b4d6">Preto</button>
+          <button class="chip" data-color="white" style="color:#fff">Branco</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-double">Girar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-double"></div>
+      <div class="result" id="res-double"></div>
+    </div>
+
+    <div class="col">
+      <div class="visual" style="display:grid;place-items:center">
+        <div class="pointer"></div>
+        <div class="wheel">
+          <div class="spinner" id="double-spinner"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Crash -->
+  <section class="panel game" data-game="crash" style="display:none">
+    <div class="col">
+      <div class="title">Crash</div>
+      <div class="muted">Defina o auto cashout e torça para não crashar antes. Payout: aposta x cashout x 0.99</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-crash" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-crash" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-crash" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-crash" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-crash">1/2</button>
+          <button class="chip" data-double="#bet-crash">x2</button>
+          <button class="chip" data-max="#bet-crash">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Auto cashout (x)</label>
+        <input type="number" id="crash-auto" min="1.01" step="0.01" value="2.00" />
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-crash">Iniciar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-crash"></div>
+      <div class="result" id="res-crash"></div>
+    </div>
+    <div class="col">
+      <div class="visual" id="viz-crash">
+        <div class="crash-wrap">
+          <div class="crash-graph">
+            <div class="crash-line" id="crash-line"></div>
+          </div>
+          <div class="crash-mult" id="crash-mult">1.00x</div>
+          <div class="crash-x">o gráfico é ilustrativo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mines -->
+  <section class="panel game" data-game="mines" style="display:none">
+    <div class="col">
+      <div class="title">Mines</div>
+      <div class="muted">Evite as minas, aumente o multiplicador e retire a tempo. Casa ~4% por passo.</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-mines" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-mines" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-mines" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-mines" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-mines">1/2</button>
+          <button class="chip" data-double="#bet-mines">x2</button>
+          <button class="chip" data-max="#bet-mines">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Minas</label>
+        <select id="mines-count">
+          <option value="3">3</option>
+          <option value="5" selected>5</option>
+          <option value="7">7</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="start-mines">Iniciar</button>
+        <button class="btn-ghost" id="cashout-mines" disabled>Sacar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="panel-hint">Multiplicador atual: <strong id="mines-multi">1.00x</strong></div>
+      <div class="history" id="hist-mines"></div>
+      <div class="result" id="res-mines"></div>
+    </div>
+
+    <div class="col">
+      <div class="visual">
+        <div class="grid" id="mines-grid" style="width:90%"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plinko -->
+  <section class="panel game" data-game="plinko" style="display:none">
+    <div class="col">
+      <div class="title">Plinko</div>
+      <div class="muted">Solte a bolinha. Multiplicadores variam conforme o slot final.</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-plinko" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-plinko" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-plinko" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-plinko" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-plinko">1/2</button>
+          <button class="chip" data-double="#bet-plinko">x2</button>
+          <button class="chip" data-max="#bet-plinko">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Linhas</label>
+        <select id="plinko-rows">
+          <option value="8" selected>8</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-plinko">Soltar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-plinko"></div>
+      <div class="result" id="res-plinko"></div>
+    </div>
+
+    <div class="col">
+      <div class="visual">
+        <div class="plinko" id="plinko-area"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roda da Fortuna -->
+  <section class="panel game" data-game="fortune" style="display:none">
+    <div class="col">
+      <div class="title">Roda da Fortuna</div>
+      <div class="muted">Segmentos com multiplicadores. Boa sorte!</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-fortune" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-fortune" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-fortune" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-fortune" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-fortune">1/2</button>
+          <button class="chip" data-double="#bet-fortune">x2</button>
+          <button class="chip" data-max="#bet-fortune">MAX</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-fortune">Girar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-fortune"></div>
+      <div class="result" id="res-fortune"></div>
+    </div>
+    <div class="col">
+      <div class="visual" style="display:grid;place-items:center">
+        <div class="fortune-pointer"></div>
+        <div class="fortune">
+          <div class="disc" id="fortune-disc"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- High-Low -->
+  <section class="panel game" data-game="hilo" style="display:none">
+    <div class="col">
+      <div class="title">High-Low (Cartas)</div>
+      <div class="muted">Adivinhe se a próxima carta será maior ou menor. Payout dinâmico com margem 1%.</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-hilo" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-hilo" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-hilo" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-hilo" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-hilo">1/2</button>
+          <button class="chip" data-double="#bet-hilo">x2</button>
+          <button class="chip" data-max="#bet-hilo">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Escolha</label>
+        <div class="row" id="hilo-choice">
+          <button class="chip active" data-guess="higher">Maior</button>
+          <button class="chip" data-guess="lower">Menor</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-hilo">Jogar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-hilo"></div>
+      <div class="result" id="res-hilo"></div>
+    </div>
+
+    <div class="col">
+      <div class="visual" style="display:grid;place-items:center;gap:12px">
+        <div class="row" style="gap:12px">
+          <div class="card" id="hilo-current">?</div>
+          <div class="card" id="hilo-next" style="transform:rotateY(180deg)">?</div>
+        </div>
+        <div class="muted">Payout estimado: <span id="hilo-payout">2.00x</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slots -->
+  <section class="panel game" data-game="slots" style="display:none">
+    <div class="col">
+      <div class="title">Slots (3x3)</div>
+      <div class="muted">Paga na linha central. 3 iguais ganham conforme a tabela.</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-slots" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-slots" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-slots" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-slots" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-slots">1/2</button>
+          <button class="chip" data-double="#bet-slots">x2</button>
+          <button class="chip" data-max="#bet-slots">MAX</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-slots">Girar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="panel-hint">Tabela: 🍒 3x • 🍋 4x • 🔔 6x • ⭐ 8x • 💎 12x • 7️⃣ 20x</div>
+      <div class="history" id="hist-slots"></div>
+      <div class="result" id="res-slots"></div>
+    </div>
+    <div class="col">
+      <div class="visual" style="display:grid;place-items:center">
+        <div class="slot" id="slot">
+          <div class="reel"><div class="strip" id="strip-0"></div></div>
+          <div class="reel"><div class="strip" id="strip-1"></div></div>
+          <div class="reel"><div class="strip" id="strip-2"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Limbo -->
+  <section class="panel game" data-game="limbo" style="display:none">
+    <div class="col">
+      <div class="title">Limbo</div>
+      <div class="muted">Escolha um alvo e veja se o multiplicador aleatório passa dele. Payout = alvo x 0.99</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Valor da aposta</label>
+        <div class="row">
+          <input type="number" id="bet-limbo" min="1" step="1" value="10" />
+          <button class="chip" data-add="#bet-limbo" data-val="10">+10</button>
+          <button class="chip" data-add="#bet-limbo" data-val="50">+50</button>
+          <button class="chip" data-add="#bet-limbo" data-val="100">+100</button>
+          <button class="chip" data-half="#bet-limbo">1/2</button>
+          <button class="chip" data-double="#bet-limbo">x2</button>
+          <button class="chip" data-max="#bet-limbo">MAX</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Alvo (x)</label>
+        <input type="number" id="limbo-target" min="1.01" step="0.01" value="2.00" />
+        <div class="muted">Chance aproximada: <span id="limbo-chance">50%</span></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="play-limbo">Jogar</button>
+      </div>
+      <div class="divider"></div>
+      <div class="history" id="hist-limbo"></div>
+      <div class="result" id="res-limbo"></div>
+    </div>
+
+    <div class="col">
+      <div class="visual" style="display:grid;place-items:center">
+        <div style="width:90%">
+          <div class="gauge">
+            <div class="fill" id="limbo-fill"></div>
+            <div class="marker" id="limbo-marker" style="left:50%"></div>
+            <div class="roll-bubble" id="limbo-bubble">1.00x</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="max-width:1200px;margin:8px auto 40px;padding:0 18px;color:var(--muted);font-size:13px">
+  Este projeto é educativo. Jogue com responsabilidade. Se precisar, pause, defina limites e busque ajuda.
+</footer>
+
+<script>
+/* ========= Utilidades ========= */
+const $ = (sel, el=document) => el.querySelector(sel);
+const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
+const fmt = (n) => `R$ ${Number(n).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const rnd = () => {
+  if (window.crypto && crypto.getRandomValues) {
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return (arr[0] / 2**32);
+  }
+  return Math.random();
+};
+const pick = (arr) => arr[Math.floor(rnd()*arr.length)];
+const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+function pushHistory(el, win){
+  const d = document.createElement('div');
+  d.className = `dot ${win?'win':'lose'}`;
+  el.prepend(d);
+  if (el.children.length > 20) el.lastChild.remove();
+}
+
+function glow(el, ok){
+  el.classList.remove('flash-win','flash-lose');
+  void el.offsetWidth;
+  el.classList.add(ok?'flash-win':'flash-lose');
+  setTimeout(()=>el.classList.remove('flash-win','flash-lose'), 400);
+}
+
+/* ========= Carteira ========= */
+let balance = parseFloat(localStorage.getItem('edubalance') || '1000');
+const balanceEl = $('#balance');
+function updateBalance(){
+  balanceEl.textContent = fmt(balance);
+  localStorage.setItem('edubalance', String(balance));
+}
+updateBalance();
+
+$('#faucet').addEventListener('click', ()=>{
+  balance += 1000; updateBalance();
+});
+$('#reset').addEventListener('click', ()=>{
+  balance = 1000; updateBalance();
+});
+
+function canBet(amount){ return amount>0 && amount <= balance; }
+function placeBet(amount){ if(!canBet(amount)) return false; balance -= amount; updateBalance(); return true; }
+function pay(amount){ balance += amount; updateBalance(); }
+
+/* ========= Chips utilitários ========= */
+function wireChips(){
+  $$('[data-add]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = $(btn.dataset.add);
+      const val = parseFloat(btn.dataset.val);
+      target.value = Math.max(1, parseFloat(target.value||'0') + val);
+    })
+  });
+  $$('[data-half]').forEach(btn=>{
+    const targetSel = btn.dataset.half;
+    btn.addEventListener('click', ()=>{
+      const target = $(targetSel);
+      target.value = Math.max(1, Math.floor(parseFloat(target.value||'0')/2));
+    });
+  });
+  $$('[data-double]').forEach(btn=>{
+    const targetSel = btn.dataset.double;
+    btn.addEventListener('click', ()=>{
+      const target = $(targetSel);
+      target.value = Math.floor(parseFloat(target.value||'0')*2);
+    });
+  });
+  $$('[data-max]').forEach(btn=>{
+    const targetSel = btn.dataset.max;
+    btn.addEventListener('click', ()=>{
+      const target = $(targetSel);
+      target.value = Math.floor(balance);
+    });
+  });
+}
+wireChips();
+
+/* ========= Tabs/Jogos ========= */
+const games = [
+  {id:'coinflip', name:'Cara ou Coroa'},
+  {id:'dice', name:'Dice'},
+  {id:'double', name:'Double'},
+  {id:'crash', name:'Crash'},
+  {id:'mines', name:'Mines'},
+  {id:'plinko', name:'Plinko'},
+  {id:'fortune', name:'Roda'},
+  {id:'hilo', name:'High-Low'},
+  {id:'slots', name:'Slots'},
+  {id:'limbo', name:'Limbo'},
+];
+const tabs = $('#tabs');
+games.forEach((g,i)=>{
+  const b = document.createElement('button');
+  b.className = 'tab' + (i===0?' active':'');
+  b.textContent = g.name;
+  b.dataset.game = g.id;
+  tabs.appendChild(b);
+});
+function showGame(id){
+  $$('.game').forEach(e=>e.style.display = e.dataset.game===id?'grid':'none');
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.game===id));
+  location.hash = '#'+id;
+}
+tabs.addEventListener('click', (e)=>{
+  const b = e.target.closest('.tab'); if(!b) return;
+  showGame(b.dataset.game);
+});
+showGame(location.hash.replace('#','') || 'coinflip');
+
+/* ========= Jogo: Cara ou Coroa ========= */
+(() => {
+  const betEl = $('#bet-coin');
+  const playBtn = $('#play-coin');
+  const res = $('#res-coin');
+  const hist = $('#hist-coin');
+  const coin = $('#coin');
+  let side = 'cara';
+  $('#coin-sides').addEventListener('click', (e)=>{
+    const btn = e.target.closest('.chip'); if(!btn) return;
+    $$('#coin-sides .chip').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    side = btn.dataset.side;
+  });
+  playBtn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)) { res.textContent = 'Saldo insuficiente ou aposta inválida.'; return; }
+    res.textContent = 'Girando...';
+    coin.textContent = '';
+    coin.classList.add('flip');
+    await wait(1200);
+    coin.classList.remove('flip');
+    const outcome = rnd() < 0.5 ? 'cara':'coroa';
+    coin.textContent = outcome === 'cara' ? 'C' : 'K';
+    const win = outcome===side;
+    if(win){
+      const payout = bet * 1.95;
+      pay(payout);
+      res.textContent = `Você ganhou ${fmt(payout - bet)} (total ${fmt(payout)}) • Resultado: ${outcome.toUpperCase()}`;
+      pushHistory(hist,true);
+      glow($('#viz-coin'),true);
+    } else {
+      res.textContent = `Você perdeu ${fmt(bet)} • Resultado: ${outcome.toUpperCase()}`;
+      pushHistory(hist,false);
+      glow($('#viz-coin'),false);
+    }
+  });
+})();
+
+/* ========= Jogo: Dice Under/Over ========= */
+(() => {
+  const betEl = $('#bet-dice');
+  const playBtn = $('#play-dice');
+  const res = $('#res-dice');
+  const hist = $('#hist-dice');
+  const targetEl = $('#dice-target');
+  const targetVal = $('#dice-target-val');
+  const gaugeFill = $('#dice-fill');
+  const marker = $('#dice-marker');
+  const bubble = $('#dice-bubble');
+  const chanceEl = $('#dice-chance');
+  const payoutEl = $('#dice-payout');
+  let mode = 'under';
+
+  function updateHud(){
+    const t = parseInt(targetEl.value);
+    targetVal.textContent = t;
+    const chance = mode==='under' ? (t-1)/100 : (100 - t)/100; // 0..1
+    const payout = chance>0 ? (0.99 / chance) : 0; // 1% casa
+    chanceEl.textContent = `${Math.round(chance*100)}%`;
+    payoutEl.textContent = `${payout.toFixed(2)}x`;
+    const markerPos = (mode==='under' ? t : t)/100 * 100;
+    marker.style.left = `${markerPos}%`;
+  }
+  updateHud();
+
+  $('#dice-mode').addEventListener('click', (e)=>{
+    const btn = e.target.closest('.chip'); if(!btn) return;
+    $$('#dice-mode .chip').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    updateHud();
+  });
+  targetEl.addEventListener('input', updateHud);
+
+  playBtn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)) { res.textContent = 'Saldo insuficiente ou aposta inválida.'; return; }
+    res.textContent = 'Rolando...';
+    const roll = rnd()*100; // 0..100
+    // anima barra
+    const t0 = performance.now();
+    const T = 800;
+    const target = roll;
+    function step(now){
+      const p = clamp((now - t0)/T, 0, 1);
+      const val = target * p;
+      gaugeFill.style.width = `${val}%`;
+      bubble.style.left = `${val}%`;
+      bubble.textContent = val.toFixed(2);
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+    await wait(T+50);
+
+    const t = parseInt(targetEl.value);
+    const chance = mode==='under' ? (t-1)/100 : (100 - t)/100;
+    const payout = chance>0 ? (0.99 / chance) : 0;
+    const win = mode==='under' ? roll < t : roll > t;
+    if(win){
+      const payAmount = bet * payout;
+      pay(payAmount);
+      res.textContent = `WIN! Roll: ${roll.toFixed(2)} • Pagamento ${payout.toFixed(2)}x • +${fmt(payAmount - bet)}`;
+      pushHistory(hist,true); glow($('.game[data-game="dice"] .visual'),true);
+    } else {
+      res.textContent = `LOSE! Roll: ${roll.toFixed(2)} • -${fmt(bet)}`;
+      pushHistory(hist,false); glow($('.game[data-game="dice"] .visual'),false);
+    }
+  });
+})();
+
+/* ========= Jogo: Double ========= */
+(() => {
+  const betEl = $('#bet-double');
+  const res = $('#res-double');
+  const hist = $('#hist-double');
+  const spinner = $('#double-spinner');
+  const btn = $('#play-double');
+  let color = 'red';
+  const segments = []; // 31: 15 red, 15 black, 1 white
+  for(let i=0;i<15;i++){ segments.push('red','black'); }
+  segments.push('white');
+
+  // desenhar segmentos
+  const size = 31;
+  const step = 360/size;
+  spinner.innerHTML = '';
+  for(let i=0;i<size;i++){
+    const seg = document.createElement('div');
+    const c = segments[i];
+    const segColor = c==='red' ? '#ff2a5a' : (c==='black' ? '#1a2036' : '#ffffff');
+    seg.style.position='absolute';
+    seg.style.inset='0';
+    seg.style.clipPath=`polygon(50% 50%, 0% 0%, 100% 0%)`;
+    seg.style.transform=`rotate(${i*step}deg)`;
+    seg.style.background=segColor;
+    seg.style.opacity=0.9;
+    spinner.appendChild(seg);
+  }
+
+  $('#double-colors').addEventListener('click', (e)=>{
+    const b = e.target.closest('.chip'); if(!b) return;
+    $$('#double-colors .chip').forEach(c=>c.classList.remove('active'));
+    b.classList.add('active');
+    color = b.dataset.color;
+  });
+
+  btn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)) { res.textContent='Saldo insuficiente ou aposta inválida.'; return; }
+    res.textContent='Girando...';
+
+    const idx = Math.floor(rnd()*segments.length);
+    const turns = 8 + Math.floor(rnd()*3);
+    const step = 360/segments.length;
+    const angle = turns*360 + (idx + 0.5)*step; // parar no meio do segmento
+    spinner.style.transform = `rotate(${angle}deg)`;
+
+    await wait(3800);
+    const outcome = segments[idx];
+    const viz = $('.game[data-game="double"] .visual');
+    let win=false, payout=0;
+    if(color==='white' && outcome==='white'){ win=true; payout=bet*14; }
+    if((color==='red' || color==='black') && outcome===color){ win=true; payout=bet*2; }
+    if(win){ pay(payout); res.textContent=`Saiu ${outcome.toUpperCase()} • +${fmt(payout-bet)} (total ${fmt(payout)})`; pushHistory(hist,true); glow(viz,true);}
+    else { res.textContent=`Saiu ${outcome.toUpperCase()} • -${fmt(bet)}`; pushHistory(hist,false); glow(viz,false); }
+  });
+})();
+
+/* ========= Jogo: Crash ========= */
+(() => {
+  const betEl = $('#bet-crash');
+  const autoEl = $('#crash-auto');
+  const btn = $('#play-crash');
+  const res = $('#res-crash');
+  const hist = $('#hist-crash');
+  const line = $('#crash-line');
+  const multEl = $('#crash-mult');
+  let running=false;
+
+  function sampleCrash(){
+    // Distribuição heavy-tail aproximada
+    const r = rnd();
+    // Exponencial deslocada: média ~2.5x, máximo limitado
+    const m = 1 + (-Math.log(1 - r)) * 1.5; // 1..inf
+    // 1% instant crash
+    const crash = (rnd()<0.01)?1.0:Math.min(30, m);
+    return crash;
+  }
+
+  btn.addEventListener('click', async ()=>{
+    if(running) return;
+    const bet = parseFloat(betEl.value||'0');
+    const auto = Math.max(1.01, parseFloat(autoEl.value||'2'));
+    if(!placeBet(bet)){ res.textContent = 'Saldo insuficiente ou aposta inválida.'; return; }
+    running = true; res.textContent='Rodando...';
+    multEl.textContent='1.00x'; line.style.width='0%';
+
+    const crashAt = sampleCrash();
+    const start = performance.now();
+    const dur = 5500 * Math.log(crashAt+0.8)/Math.log(10); // tempo proporcional
+    let win=false, paid=0;
+
+    await new Promise(resolve=>{
+      function frame(now){
+        const p = clamp((now - start)/dur, 0, 1);
+        const mult = 1 + (crashAt - 1) * p;
+        multEl.textContent = mult.toFixed(2)+'x';
+        line.style.width = `${p*100}%`;
+        if(mult >= auto){
+          // cashout automático
+          win=true;
+          paid = bet * auto * 0.99;
+          resolve();
+          return;
+        }
+        if(p<1) requestAnimationFrame(frame);
+        else resolve();
+      }
+      requestAnimationFrame(frame);
+    });
+
+    const viz = $('#viz-crash');
+    if(win){
+      pay(paid);
+      res.textContent = `Cashout em ${auto.toFixed(2)}x • +${fmt(paid-bet)} (total ${fmt(paid)}) • Crash em ${crashAt.toFixed(2)}x`;
+      pushHistory(hist,true); glow(viz,true);
+    } else {
+      res.textContent = `Crashed em ${crashAt.toFixed(2)}x • -${fmt(bet)}`;
+      pushHistory(hist,false); glow(viz,false);
+    }
+    running=false;
+  });
+})();
+
+/* ========= Jogo: Mines ========= */
+(() => {
+  const betEl = $('#bet-mines');
+  const countEl = $('#mines-count');
+  const startBtn = $('#start-mines');
+  const cashBtn = $('#cashout-mines');
+  const gridEl = $('#mines-grid');
+  const res = $('#res-mines');
+  const hist = $('#hist-mines');
+  const multiEl = $('#mines-multi');
+  let state = null;
+
+  function newGame(){
+    const mines = parseInt(countEl.value);
+    const cells = Array(25).fill(0);
+    let placed=0;
+    while(placed<mines){
+      const i = Math.floor(rnd()*25);
+      if(cells[i]===0){ cells[i]=1; placed++; }
+    }
+    state = {
+      bet: 0, mines, cells, revealed: Array(25).fill(false),
+      running:false, multi:1, remainingSafe:25-mines, remaining:25
+    };
+  }
+  function renderGrid(clickable){
+    gridEl.innerHTML='';
+    state.revealed.forEach((rev, i)=>{
+      const d = document.createElement('div');
+      d.className='cell';
+      if(rev){
+        d.classList.add('revealed');
+        if(state.cells[i]===1) d.classList.add('mine'), d.textContent='💣';
+        else d.classList.add('safe'), d.textContent='💠';
+      }
+      if(clickable && !rev){
+        d.addEventListener('click', ()=>clickCell(i));
+      }
+      gridEl.appendChild(d);
+    });
+  }
+  function stepMultiplier(){
+    // fator justo aproximado: (cells restantes / safe restantes) * margem
+    const f = (state.remaining / Math.max(1,state.remainingSafe)) * 0.96;
+    state.multi *= f;
+    multiEl.textContent = `${state.multi.toFixed(2)}x`;
+  }
+  function clickCell(i){
+    if(!state.running) return;
+    if(state.revealed[i]) return;
+    state.revealed[i]=true;
+    state.remaining--;
+    if(state.cells[i]===1){
+      // explode
+      renderGrid(false);
+      res.textContent = `BOOM! Você perdeu ${fmt(state.bet)}. Mult final: ${state.multi.toFixed(2)}x`;
+      pushHistory(hist,false);
+      cashBtn.disabled=true;
+      state.running=false;
+      return;
+    } else {
+      state.remainingSafe--;
+      stepMultiplier();
+      renderGrid(true);
+    }
+  }
+
+  startBtn.addEventListener('click', ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)){ res.textContent='Saldo insuficiente ou aposta inválida.'; return; }
+    newGame();
+    state.bet = bet; state.running=true; state.multi=1; multiEl.textContent='1.00x';
+    res.textContent='Jogo iniciado. Abra as células e saque quando quiser.';
+    renderGrid(true);
+    cashBtn.disabled=false;
+  });
+  cashBtn.addEventListener('click', ()=>{
+    if(!state || !state.running) return;
+    const payout = state.bet * state.multi;
+    pay(payout);
+    res.textContent = `Cashout! +${fmt(payout - state.bet)} (total ${fmt(payout)})`;
+    pushHistory(hist,true);
+    cashBtn.disabled=true;
+    state.running=false;
+    renderGrid(false);
+  });
+
+  // estado inicial
+  newGame(); renderGrid(false);
+})();
+
+/* ========= Jogo: Plinko ========= */
+(() => {
+  const betEl = $('#bet-plinko');
+  const rowsEl = $('#plinko-rows');
+  const playBtn = $('#play-plinko');
+  const area = $('#plinko-area');
+  const res = $('#res-plinko');
+  const hist = $('#hist-plinko');
+
+  function setupBoard(rows){
+    area.innerHTML='';
+    const w = area.clientWidth;
+    const h = area.clientHeight;
+    // pinos
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<=r;c++){
+        const peg = document.createElement('div');
+        peg.className='peg';
+        const x = (w/2) - (r*14)/2 + c*14;
+        const y = 40 + r*20;
+        peg.style.left = `${x}px`;
+        peg.style.top = `${y}px`;
+        area.appendChild(peg);
+      }
+    }
+    // bins
+    const bins = document.createElement('div');
+    bins.className='bins';
+    const multipliers = plinkoMultipliers(rows);
+    multipliers.forEach(m=>{
+      const b = document.createElement('div');
+      b.className='bin';
+      b.textContent = `${m.toFixed(2)}x`;
+      bins.appendChild(b);
+    });
+    area.appendChild(bins);
+  }
+
+  function plinkoMultipliers(rows){
+    // Tabela simétrica: centro ~0.5x, extremos maiores
+    const probs = [];
+    let sum=0;
+    for(let k=0;k<=rows;k++){
+      // C(rows,k)/2^rows
+      let c=1;
+      for(let i=1;i<=k;i++) c = c*(rows - i + 1)/i;
+      const p = c / (2**rows);
+      probs.push(p); sum += p;
+    }
+    // base: extremos altos
+    const mults = [];
+    for(let k=0;k<=rows;k++){
+      const dist = Math.abs(k - rows/2);
+      const m = 0.35 + (dist / (rows/2))**1.6 * 6.5; // extremos ~6-7x
+      mults.push(m);
+    }
+    // normalizar para EV ~0.98
+    let ev=0; for(let i=0;i<=rows;i++) ev += probs[i]*mults[i];
+    const factor = 0.98 / ev;
+    return mults.map(m=>m*factor);
+  }
+
+  async function drop(rows){
+    const w = area.clientWidth;
+    const ball = document.createElement('div');
+    ball.className='ball';
+    area.appendChild(ball);
+    let x = w/2, y = 10, bin=0;
+    for(let r=0;r<rows;r++){
+      await wait(120);
+      const right = rnd()<0.5?0:1;
+      x += (right?1:-1) * 7;
+      y += 20;
+      bin += right?1:0;
+      ball.style.left = `${x}px`;
+      ball.style.top = `${y}px`;
+    }
+    await wait(150);
+    return bin;
+  }
+
+  rowsEl.addEventListener('change', ()=>setupBoard(parseInt(rowsEl.value)));
+  setupBoard(parseInt(rowsEl.value));
+
+  playBtn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)){ res.textContent='Saldo insuficiente ou aposta inválida.'; return; }
+    res.textContent = 'Soltando...';
+    const rows = parseInt(rowsEl.value);
+    const mults = plinkoMultipliers(rows);
+    const bin = await drop(rows);
+    const payout = bet * mults[bin];
+    const win = payout>0 && payout>=bet;
+    if(payout>0) pay(payout);
+    res.textContent = `${win?'WIN':'RESULT'} • Slot ${bin+1}/${rows+1} • Mult ${mults[bin].toFixed(2)}x • ${payout>0?'+':''}${fmt(payout - bet)}`;
+    pushHistory(hist, payout>=bet);
+    glow($('.game[data-game="plinko"] .visual'), payout>=bet);
+  });
+})();
+
+/* ========= Jogo: Roda da Fortuna ========= */
+(() => {
+  const betEl = $('#bet-fortune');
+  const btn = $('#play-fortune');
+  const res = $('#res-fortune');
+  const hist = $('#hist-fortune');
+  const disc = $('#fortune-disc');
+
+  const segs = [0,0.5,1,2,3,5,10,20];
+  const count = 16; // 16 segmentos, repetindo
+  const segments = Array.from({length:count}, (_,i)=>segs[i%segs.length]);
+  const step = 360/count;
+
+  // desenhar slices
+  disc.innerHTML='';
+  for(let i=0;i<count;i++){
+    const s = document.createElement('div');
+    s.style.position='absolute'; s.style.inset='0';
+    s.style.clipPath='polygon(50% 50%, 0% 0%, 100% 0%)';
+    s.style.transform=`rotate(${i*step}deg)`;
+    const m = segments[i];
+    const col = m===0?'#1a2036': m<1 ? '#6b78a8' : (m<5?'#1ee3cf':'#ff2a5a');
+    s.style.background = col; s.style.opacity=0.9;
+    disc.appendChild(s);
+  }
+
+  btn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)) { res.textContent='Saldo insuficiente ou aposta inválida.'; return; }
+    res.textContent='Girando...';
+    const idx = Math.floor(rnd()*segments.length);
+    const turns = 7 + Math.floor(rnd()*4);
+    const angle = turns*360 + (idx + 0.5)*step;
+    disc.style.transform = `rotate(${angle}deg)`;
+    await wait(4000);
+    const mult = segments[idx];
+    const payout = bet * mult;
+    if(payout>0){ pay(payout); res.textContent = `Parou em ${mult}x • +${fmt(payout - bet)} (total ${fmt(payout)})`; pushHistory(hist, payout>=bet); glow($('.game[data-game="fortune"] .visual'), payout>=bet); }
+    else { res.textContent = `Parou em 0 • -${fmt(bet)}`; pushHistory(hist,false); glow($('.game[data-game="fortune"] .visual'), false); }
+  });
+})();
+
+/* ========= Jogo: High-Low ========= */
+(() => {
+  const betEl = $('#bet-hilo');
+  const playBtn = $('#play-hilo');
+  const res = $('#res-hilo');
+  const hist = $('#hist-hilo');
+  const cur = $('#hilo-current');
+  const nxt = $('#hilo-next');
+  const payoutEl = $('#hilo-payout');
+  let guess = 'higher';
+  let current = null;
+
+  const faces = {11:'J',12:'Q',13:'K',14:'A'};
+  function randCard(){ return 2 + Math.floor(rnd()*13); }
+  function label(v){ return faces[v] || v; }
+
+  function newRound(){
+    current = randCard();
+    cur.textContent = label(current);
+    nxt.textContent='?';
+    nxt.style.transform='rotateY(180deg)';
+    updatePayout();
+  }
+  function updatePayout(){
+    const higherProb = (14 - current)/12; // ignora empate e remove valor atual
+    const lowerProb = (current - 2)/12;
+    const prob = guess==='higher' ? higherProb : lowerProb;
+    const payout = prob>0 ? (0.99 / prob) : 0;
+    payoutEl.textContent = `${payout.toFixed(2)}x`;
+  }
+
+  $('#hilo-choice').addEventListener('click', (e)=>{
+    const b = e.target.closest('.chip'); if(!b) return;
+    $$('#hilo-choice .chip').forEach(c=>c.classList.remove('active'));
+    b.classList.add('active'); guess = b.dataset.guess;
+    updatePayout();
+  });
+
+  playBtn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)){ res.textContent='Saldo insuficiente ou aposta inválida.'; return; }
+    const next = randCard();
+    nxt.textContent = label(next);
+    nxt.style.transform='rotateY(0deg)';
+    const win = (guess==='higher' && next>current) || (guess==='lower' && next<current);
+    // Empate perde para gerar margem
+    const higherProb = (14 - current)/12;
+    const lowerProb = (current - 2)/12;
+    const prob = guess==='higher'?higherProb:lowerProb;
+    const payout = prob>0 ? (0.99 / prob) : 0;
+    if(win){
+      const amount = bet * payout;
+      pay(amount);
+      res.textContent = `WIN! ${label(current)} → ${label(next)} • +${fmt(amount - bet)} (total ${fmt(amount)})`;
+      pushHistory(hist,true); glow($('.game[data-game="hilo"] .visual'), true);
+    } else {
+      res.textContent = `LOSE! ${label(current)} → ${label(next)} • -${fmt(bet)}`;
+      pushHistory(hist,false); glow($('.game[data-game="hilo"] .visual'), false);
+    }
+    await wait(500);
+    newRound();
+  });
+
+  newRound();
+})();
+
+/* ========= Jogo: Slots ========= */
+(() => {
+  const betEl = $('#bet-slots');
+  const btn = $('#play-slots');
+  const res = $('#res-slots');
+  const hist = $('#hist-slots');
+  const symbols = ['🍒','🍋','🔔','⭐','💎','7️⃣'];
+  const pays = { '🍒':3, '🍋':4, '🔔':6, '⭐':8, '💎':12, '7️⃣':20 };
+  for(let i=0;i<3;i++){
+    const strip = $(`#strip-${i}`);
+    const seq = [];
+    for(let k=0;k<20;k++){ seq.push(pick(symbols)); }
+    strip.innerHTML = seq.map(s=>`<div class="sym">${s}</div>`).join('');
+  }
+
+  function spinReel(i, stopSymIndex){
+    const strip = $(`#strip-${i}`);
+    const total = strip.children.length;
+    const stopIndex = (stopSymIndex + total) % total;
+    const extraTurns = 2+i; // 2,3,4
+    const y = -( (stopIndex+extraTurns*total-1)*64 );
+    strip.style.transitionDuration = `${0.8 + i*0.15}s`;
+    strip.style.transform = `translateY(${y}px)`;
+  }
+
+  btn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    if(!placeBet(bet)){ res.textContent='Saldo insuficiente ou aposta inválida.'; return; }
+    res.textContent='Girando...';
+
+    // Escolher símbolos finais aleatórios no meio da fita
+    const results = [];
+    for(let i=0;i<3;i++){
+      const strip = $(`#strip-${i}`);
+      const total = strip.children.length;
+      const centerIndex = 5 + Math.floor(rnd()*(total-10));
+      results.push(strip.children[centerIndex].textContent);
+      spinReel(i, centerIndex);
+    }
+
+    await wait(1200);
+    const [a,b,c] = results;
+    let payout = 0;
+    if(a===b && b===c) payout = bet * pays[a];
+    if(payout>0) pay(payout);
+    const viz = $('.game[data-game="slots"] .visual');
+    if(payout>0){
+      res.textContent = `Linha: ${a} ${b} ${c} • Pagou ${pays[a]}x • +${fmt(payout - bet)} (total ${fmt(payout)})`;
+      pushHistory(hist, payout>=bet); glow(viz, payout>=bet);
+    } else {
+      res.textContent = `Linha: ${a} ${b} ${c} • Sem prêmio • -${fmt(bet)}`;
+      pushHistory(hist,false); glow(viz, false);
+    }
+  });
+})();
+
+/* ========= Jogo: Limbo ========= */
+(() => {
+  const betEl = $('#bet-limbo');
+  const targetEl = $('#limbo-target');
+  const btn = $('#play-limbo');
+  const res = $('#res-limbo');
+  const hist = $('#hist-limbo');
+  const fill = $('#limbo-fill');
+  const marker = $('#limbo-marker');
+  const bubble = $('#limbo-bubble');
+  const chanceEl = $('#limbo-chance');
+
+  function updateHud(){
+    const t = Math.max(1.01, parseFloat(targetEl.value||'2'));
+    const chance = 1 / t; // aproximado
+    chanceEl.textContent = `${(chance*100).toFixed(1)}%`;
+    marker.style.left = `${clamp(chance*100,2,98)}%`;
+  }
+  updateHud();
+  targetEl.addEventListener('input', updateHud);
+
+  btn.addEventListener('click', async ()=>{
+    const bet = parseFloat(betEl.value||'0');
+    const target = Math.max(1.01, parseFloat(targetEl.value||'2'));
+    if(!placeBet(bet)){ res.textContent='Saldo insuficiente ou aposta inválida.'; return; }
+    res.textContent = 'Rodando...';
+    fill.style.width='0%'; bubble.textContent='1.00x'; bubble.style.left='0%';
+
+    // Gerar multiplicador aleatório com cauda pesada simples
+    const r = rnd();
+    const mult = 1 + (-Math.log(1 - r)) * 1.7; // 1..inf
+    const dur = 900;
+    const start = performance.now();
+    await new Promise(resolve=>{
+      function frame(now){
+        const p = clamp((now - start)/dur, 0, 1);
+        const m = 1 + (mult - 1)*p;
+        const pos = clamp((1/m)*100, 0, 100); // só pra visual
+        bubble.textContent = `${m.toFixed(2)}x`;
+        bubble.style.left = `${(p*100)}%`;
+        fill.style.width = `${p*100}%`;
+        if(p<1) requestAnimationFrame(frame);
+        else resolve();
+      }
+      requestAnimationFrame(frame);
+    });
+
+    const win = mult >= target;
+    const payout = bet * target * 0.99;
+    if(win){
+      pay(payout);
+      res.textContent = `WIN! Multiplicador ${mult.toFixed(2)}x ≥ alvo ${target.toFixed(2)}x • +${fmt(payout - bet)} (total ${fmt(payout)})`;
+      pushHistory(hist,true); glow($('.game[data-game="limbo"] .visual'), true);
+    } else {
+      res.textContent = `LOSE! Multiplicador ${mult.toFixed(2)}x < alvo ${target.toFixed(2)}x • -${fmt(bet)}`;
+      pushHistory(hist,false); glow($('.game[data-game="limbo"] .visual'), false);
+    }
+  });
+})();
+
+/* ========= Navegação por hash ========= */
+window.addEventListener('hashchange', ()=>{
+  const id = location.hash.replace('#','');
+  if(games.some(g=>g.id===id)) showGame(id);
+});
+</script>
+</body>
+</html>

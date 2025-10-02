@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BacanAI — Chatbot IA</title>
+    <meta name="description" content="BacanAI: um chatbot IA simples e funcional usando API gratuita (Groq)." />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='120' width='120'%3E%3Ctext y='0.9em' font-size='100'%3E🤖%3C/text%3E%3C/svg%3E" />
+    <meta name="color-scheme" content="dark light" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">🤖</span>
+        <span class="title">BacanAI</span>
+        <span class="badge">beta</span>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-settings" class="btn" title="Configurar API">Configurar API</button>
+        <button id="btn-clear" class="btn secondary" title="Limpar conversa">Limpar</button>
+        <button id="btn-theme" class="btn icon" title="Alternar tema" aria-label="Alternar tema">🌙</button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <section id="chat" class="chat" aria-live="polite" aria-label="Conversa do chat">
+        <div id="messages" class="messages">
+          <!-- Mensagem de boas-vindas inicial -->
+          <div class="message assistant">
+            <div class="avatar" aria-hidden="true">🤖</div>
+            <div class="bubble">
+              <div class="name">BacanAI</div>
+              <div class="content">
+                <p>Oi! Eu sou o <strong>BacanAI</strong> — seu chatbot IA.</p>
+                <p>
+                  Para começar, clique em <em>Configurar API</em>, cole sua chave da
+                  <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">Groq (grátis)</a>,
+                  escolha um modelo e mande sua primeira mensagem. 😉
+                </p>
+                <p class="hint">Dica: pressione Shift+Enter para quebrar linha.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <form id="chat-form" class="chat-form" autocomplete="off">
+        <div class="toolbar">
+          <label class="inline">
+            Modelo
+            <select id="model-select" aria-label="Selecionar modelo">
+              <option value="llama-3.1-8b-instant">Llama-3.1-8B-Instant (rápido)</option>
+              <option value="llama-3.1-70b-versatile">Llama-3.1-70B-Versatile (qualidade)</option>
+              <option value="mixtral-8x7b-32768">Mixtral-8x7b-32k</option>
+              <option value="gemma2-9b-it">Gemma2-9B-IT</option>
+            </select>
+          </label>
+
+          <label class="inline">
+            Criatividade
+            <input id="temperature" type="range" min="0" max="1" step="0.05" value="0.7" />
+            <output id="temp-value" for="temperature">0.7</output>
+          </label>
+
+          <label class="inline">
+            <input id="streaming" type="checkbox" checked />
+            Streaming
+          </label>
+
+          <button id="btn-stop" type="button" class="btn danger hidden" title="Parar geração">Parar</button>
+        </div>
+
+        <div class="input-row">
+          <textarea
+            id="user-input"
+            rows="1"
+            placeholder="Digite sua mensagem..."
+            aria-label="Sua mensagem"
+          ></textarea>
+          <button id="btn-send" class="btn primary" type="submit" title="Enviar">Enviar</button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="app-footer">
+      <div class="foot-left">
+        <span>Feito com ❤️ por você</span>
+      </div>
+      <div class="foot-right">
+        <span>Usa <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">API gratuita da Groq</a>. Sua chave fica salva localmente.</span>
+      </div>
+    </footer>
+
+    <!-- Modal de Configurações -->
+    <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-content">
+        <header class="modal-header">
+          <h2 id="settings-title">Configurações</h2>
+          <button id="btn-close-settings" class="btn icon" aria-label="Fechar">✖</button>
+        </header>
+
+        <div class="modal-body">
+          <p>
+            Cole sua <strong>Groq API Key</strong> para usar o BacanAI.
+            Se ainda não tiver, crie uma gratuitamente em
+            <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a>.
+          </p>
+
+          <div class="form-control">
+            <label for="api-key">Groq API Key</label>
+            <div class="key-input">
+              <input type="password" id="api-key" placeholder="gsk_..." autocomplete="off" />
+              <button id="toggle-key-visibility" type="button" class="btn icon" title="Mostrar/ocultar">👁️</button>
+            </div>
+            <small class="muted">A chave é armazenada no seu navegador (localStorage).</small>
+          </div>
+
+          <div class="form-control">
+            <label for="system-prompt">Instruções do sistema (opcional)</label>
+            <textarea id="system-prompt" rows="3" placeholder="Você é o BacanAI, um assistente útil, direto e bacana."></textarea>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button id="btn-cancel-settings" class="btn secondary" type="button">Cancelar</button>
+          <button id="btn-save-settings" class="btn primary" type="button">Salvar</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Toasts / Notificações -->
+    <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+    <noscript>
+      <div class="noscript">
+        Este app precisa de JavaScript para funcionar. Por favor, ative o JavaScript no seu navegador.
+      </div>
+    </noscript>
+
+    <script defer src="script.js"></script>
+  </body>
+</html>

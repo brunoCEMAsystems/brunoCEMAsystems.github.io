@@ -1,6 +1,6 @@
 /* ==========================================================================
    BacanAI — script.js
-   Chatbot IA usando a API OpenAI-compatível da Groq (gratuita)
+   Chatbot IA usando a API OpenAI-compatível da Groq
    - Chave de API armazenada no localStorage
    - Streaming de tokens com AbortController
    - Tema claro/escuro, configurações e toasts
@@ -8,6 +8,9 @@
 
 (() => {
   'use strict';
+
+  // SUA CHAVE (ATENÇÃO: evite expor em produção)
+  const DEFAULT_GROQ_API_KEY = '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';
 
   // ---------------------------
   // Utilidades de armazenamento
@@ -35,7 +38,6 @@
   // Seletores de elementos
   // ---------------------------
   const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   const els = {
     root: document.documentElement,
@@ -62,14 +64,14 @@
     toasts: $('#toasts')
   };
 
-  // Guardar o HTML inicial (mensagem de boas-vindas) para restaurar em "Limpar"
+  // Guardar o HTML inicial para restaurar em "Limpar"
   const initialMessagesHTML = els.messages.innerHTML;
 
   // ---------------------------
   // Estado da aplicação
   // ---------------------------
   const state = {
-    apiKey: storage.get('apiKey', ''),
+    apiKey: storage.get('apiKey', DEFAULT_GROQ_API_KEY),
     model: storage.get('model', 'llama-3.1-8b-instant'),
     temperature: storage.get('temperature', 0.7),
     streaming: storage.get('streaming', true),
@@ -79,6 +81,13 @@
     controller: null,
     messages: storage.get('messages', []) // [{role:'user'|'assistant', content:''}]
   };
+
+  // Se não havia chave salva, persiste a default e avisa
+  const hadKey = localStorage.getItem(LS_PREFIX + 'apiKey') !== null;
+  if (!hadKey && state.apiKey) {
+    storage.set('apiKey', state.apiKey);
+    setTimeout(() => showToast('Groq API Key foi pré-configurada localmente.', 'success'), 300);
+  }
 
   function detectPreferredTheme() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -289,7 +298,6 @@
     const contentEl = document.createElement('div');
     contentEl.className = 'content';
 
-    // Conteúdo pode ser HTML renderizado de Markdown (seguro)
     if (opts.rawHtml) {
       contentEl.innerHTML = content || '';
     } else {
@@ -323,7 +331,6 @@
   }
 
   function scrollToBottom() {
-    // Suave e sem travar streaming
     requestAnimationFrame(() => {
       els.messages.scrollTop = els.messages.scrollHeight;
     });
@@ -373,7 +380,6 @@
           content: state.systemPrompt
         });
       }
-      // Histórico + mensagem atual
       for (const m of state.messages) {
         payloadMessages.push({ role: m.role, content: m.content });
       }
@@ -384,10 +390,8 @@
         temperature: state.temperature,
         stream: state.streaming
       }, (delta) => {
-        // Streaming callback
-        // Acrescenta no último assistente (no estado também)
+        // Streaming callback: acumula no último assistant
         const last = state.messages[state.messages.length - 1];
-        // Se último não é assistant, precisamos criar temporário
         if (!last || last.role !== 'assistant') {
           state.messages.push({ role: 'assistant', content: '' });
         }
@@ -395,7 +399,6 @@
         updateAssistantContent(contentEl, state.messages[state.messages.length - 1].content, bubble);
       });
 
-      // Caso não use streaming, vamos setar o conteúdo final
       if (!state.streaming) {
         state.messages.push({ role: 'assistant', content: responseText || '' });
         updateAssistantContent(contentEl, responseText || '', bubble);
@@ -597,10 +600,5 @@
 
     return out || '';
   }
-
-  // ---------------------------
-  // Expor alguns helpers no console (debug)
-  // ---------------------------
-  // window.__bacanai = { state, storage };
 
 })();

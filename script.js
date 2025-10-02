@@ -10,7 +10,7 @@
   'use strict';
 
   // SUA CHAVE (ATENÇÃO: evite expor em produção)
-  const DEFAULT_GROQ_API_KEY = 'AIzaSyAwS4HMM59birVmxl8bMhdjeK8gNAl7kNM';
+  const DEFAULT_GROQ_API_KEY = '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';
 
   // ---------------------------
   // Utilidades de armazenamento

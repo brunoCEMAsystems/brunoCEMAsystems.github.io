@@ -1,146 +1,665 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BacanAI — Chatbot IA</title>
-    <meta name="description" content="BacanAI: um chatbot IA simples e funcional usando API gratuita da Groq." />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='120' width='120'%3E%3Ctext y='0.9em' font-size='100'%3E🤖%3C/text%3E%3C/svg%3E" />
-    <meta name="color-scheme" content="dark light" />
-  </head>
-  <body>
-    <header class="app-header">
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Matemática em Ação: Pitágoras, Triângulos e Probabilidade</title>
+  <style>
+    :root{
+      --bg:#f7fafc;
+      --surface:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --primary:#4f46e5;
+      --primary-2:#4338ca;
+      --secondary:#06b6d4;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --warning:#f59e0b;
+      --radius:14px;
+      --shadow: 0 8px 24px rgba(2,6,23,0.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";}
+    a{color:inherit}
+    header{
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+      color:#fff;
+      padding: 56px 20px 32px;
+      position: sticky; top:0; z-index: 20;
+    }
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand .logo{
+      width:48px;height:48px;border-radius:12px;
+      display:grid;place-items:center;font-size:28px;
+      background: rgba(255,255,255,0.16);
+      backdrop-filter: blur(4px);
+    }
+    .title{margin:8px 0 0;font-size:28px}
+    .subtitle{margin:6px 0 0;color:rgba(255,255,255,0.9)}
+    nav{
+      margin-top:18px; display:flex; gap:12px; flex-wrap:wrap
+    }
+    nav a{
+      text-decoration:none; background: rgba(255,255,255,0.12);
+      color:#fff; padding:10px 14px; border-radius:999px; font-weight:600;
+      transition: .2s transform, .2s background;
+    }
+    nav a:hover{transform: translateY(-2px); background: rgba(255,255,255,0.18)}
+    main{padding:28px 0 60px}
+    section{margin:26px 0}
+    .card{
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    h2{margin:0 0 8px; font-size:26px}
+    h3{margin:10px 0 8px;font-size:20px}
+    p{line-height:1.6}
+    .grid{
+      display:grid; gap:16px;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+    }
+    .span-12{grid-column: span 12}
+    .span-6{grid-column: span 6}
+    .span-4{grid-column: span 4}
+    @media (max-width: 900px){
+      .span-6{grid-column: span 12}
+      .span-4{grid-column: span 12}
+    }
+
+    /* Inputs e botões */
+    label{font-weight:600; display:block; margin-bottom:6px}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    input[type="number"], select, input[type="text"]{
+      width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; font-size:16px;
+      background:#fff; color:var(--text); outline:none;
+    }
+    input[type="number"]:focus, select:focus, input[type="text"]:focus{border-color: var(--primary)}
+    .btn{
+      appearance:none; border:none; border-radius:12px; padding:10px 14px;
+      background: var(--primary); color:#fff; font-weight:700; cursor:pointer;
+      transition:.2s transform, .2s opacity, .2s background;
+    }
+    .btn.secondary{background: var(--secondary)}
+    .btn.ghost{background: transparent; border:1px solid #e5e7eb; color: var(--text)}
+    .btn.success{background: var(--success)}
+    .btn.danger{background: var(--danger)}
+    .btn:disabled{opacity:.55; cursor:not-allowed}
+    .btn:hover:not(:disabled){transform: translateY(-1px)}
+
+    .muted{color: var(--muted)}
+    .badge{
+      display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px;
+      background:#eef2ff; color: var(--primary); font-weight:700;
+    }
+
+    /* Listas e caixas */
+    .list{display:grid; gap:10px}
+    .note{
+      background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:12px
+    }
+    .ok{color: var(--success); font-weight:700}
+    .no{color: var(--danger); font-weight:700}
+
+    /* Quiz */
+    .options{display:grid; gap:10px; margin-top:10px}
+    .option{
+      border:1px solid #e5e7eb; border-radius:12px; padding:10px 12px; cursor:pointer; background:#fff;
+      transition:.18s border, .18s transform, .18s background;
+    }
+    .option:hover{transform: translateY(-1px); border-color: var(--primary)}
+    .option.correct{border-color: var(--success); background:#ecfdf5}
+    .option.wrong{border-color: var(--danger); background:#fef2f2}
+    .status{display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:8px}
+
+    /* Barras (probabilidade) */
+    .bars{display:flex; gap:12px; align-items:flex-end; min-height:160px; padding:12px; border:1px dashed #e5e7eb; border-radius:12px; background:#fafafa}
+    .bar{
+      flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;
+    }
+    .bar .col{
+      width:100%; border-radius:10px 10px 2px 2px; background: linear-gradient(180deg, #60a5fa, #3b82f6);
+      min-height:4px; transition: .3s height;
+      box-shadow: inset 0 -8px 16px rgba(0,0,0,0.05);
+    }
+    .bar .label{font-weight:700}
+    .details{display:grid; gap:8px; margin-top:10px}
+    .details .row{justify-content: space-between}
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      background:#111827; color:#fff; padding:2px 6px; border-radius:6px; font-size:12px
+    }
+    footer{
+      padding:20px; text-align:center; color:#334155
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
       <div class="brand">
-        <span class="logo" aria-hidden="true">🤖</span>
-        <span class="title">BacanAI</span>
-        <span class="badge">beta</span>
+        <div class="logo">∑</div>
+        <div>
+          <h1 class="title">Matemática em Ação</h1>
+          <p class="subtitle">Pitágoras, casos de triângulos e probabilidade — com atividades interativas ✨</p>
+        </div>
       </div>
+      <nav>
+        <a href="#pitagoras">📐 Pitágoras</a>
+        <a href="#triangulos">🔺 Casos Triangulares</a>
+        <a href="#probabilidade">🎲 Probabilidade</a>
+      </nav>
+    </div>
+  </header>
 
-      <div class="header-actions">
-        <button id="btn-settings" class="btn" title="Configurar API">Configurar API</button>
-        <button id="btn-clear" class="btn secondary" title="Limpar conversa">Limpar</button>
-        <button id="btn-theme" class="btn icon" title="Alternar tema" aria-label="Alternar tema">🌙</button>
-      </div>
-    </header>
+  <main class="container">
+    <!-- PITÁGORAS -->
+    <section id="pitagoras" class="card">
+      <div class="grid">
+        <div class="span-12">
+          <h2>📐 Teorema de Pitágoras</h2>
+          <p>
+            Em um triângulo retângulo, a soma dos quadrados dos catetos é igual ao quadrado da hipotenusa:
+            <b>a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup></b>.
+          </p>
+          <div class="note">
+            • c é a hipotenusa (lado oposto ao ângulo de 90°). • a e b são os catetos.
+          </div>
+        </div>
 
-    <main class="app-main">
-      <section id="chat" class="chat" aria-live="polite" aria-label="Conversa do chat">
-        <div id="messages" class="messages">
-          <!-- Mensagem de boas-vindas inicial -->
-          <div class="message assistant">
-            <div class="avatar" aria-hidden="true">🤖</div>
-            <div class="bubble">
-              <div class="name">BacanAI</div>
-              <div class="content">
-                <p>Oi! Eu sou o <strong>BacanAI</strong> — seu chatbot IA.</p>
-                <p>
-                  Sua <strong>Groq API Key</strong> já foi <em>pré-configurada localmente</em>.
-                  Se quiser trocar, clique em <em>Configurar API</em>.
-                </p>
-                <p>
-                  Escolha um modelo abaixo, ajuste a criatividade e mande sua primeira mensagem. 😉
-                </p>
-                <p class="hint">Dica: pressione Shift+Enter para quebrar linha.</p>
+        <div class="span-6">
+          <h3>Atividade: Complete o triângulo retângulo</h3>
+          <div class="list">
+            <label for="tipoCalculoP">O que você quer calcular?</label>
+            <select id="tipoCalculoP">
+              <option value="c">Hipotenusa (c)</option>
+              <option value="cateto">Um cateto (a ou b)</option>
+            </select>
+
+            <div id="inputsHip" class="list">
+              <div>
+                <label>Cateto a (unidades)</label>
+                <input id="aInput" type="number" step="any" min="0" placeholder="ex.: 3" />
+              </div>
+              <div>
+                <label>Cateto b (unidades)</label>
+                <input id="bInput" type="number" step="any" min="0" placeholder="ex.: 4" />
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <form id="chat-form" class="chat-form" autocomplete="off">
-        <div class="toolbar">
-          <label class="inline">
-            Modelo
-            <select id="model-select" aria-label="Selecionar modelo">
-              <option value="llama-3.1-8b-instant">Llama-3.1-8B-Instant (rápido)</option>
-              <option value="llama-3.1-70b-versatile">Llama-3.1-70B-Versatile (qualidade)</option>
-              <option value="mixtral-8x7b-32768">Mixtral-8x7b-32k</option>
-              <option value="gemma2-9b-it">Gemma2-9B-IT</option>
-            </select>
-          </label>
-
-          <label class="inline">
-            Criatividade
-            <input id="temperature" type="range" min="0" max="1" step="0.05" value="0.7" />
-            <output id="temp-value" for="temperature">0.7</output>
-          </label>
-
-          <label class="inline">
-            <input id="streaming" type="checkbox" checked />
-            Streaming
-          </label>
-
-          <button id="btn-stop" type="button" class="btn danger hidden" title="Parar geração">Parar</button>
-        </div>
-
-        <div class="input-row">
-          <textarea
-            id="user-input"
-            rows="1"
-            placeholder="Digite sua mensagem..."
-            aria-label="Sua mensagem"
-          ></textarea>
-          <button id="btn-send" class="btn primary" type="submit" title="Enviar">Enviar</button>
-        </div>
-      </form>
-    </main>
-
-    <footer class="app-footer">
-      <div class="foot-left">
-        <span>Feito com ❤️ por você</span>
-      </div>
-      <div class="foot-right">
-        <span>Usa <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">API gratuita da Groq</a>. A chave fica salva localmente.</span>
-      </div>
-    </footer>
-
-    <!-- Modal de Configurações -->
-    <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
-      <div class="modal-content">
-        <header class="modal-header">
-          <h2 id="settings-title">Configurações</h2>
-          <button id="btn-close-settings" class="btn icon" aria-label="Fechar">✖</button>
-        </header>
-
-        <div class="modal-body">
-          <p>
-            Gerencie sua <strong>Groq API Key</strong> e as instruções do sistema.
-            Se precisar de outra chave, crie em
-            <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a>.
-          </p>
-
-          <div class="form-control">
-            <label for="api-key">Groq API Key</label>
-            <div class="key-input">
-              <input type="password" id="api-key" placeholder="gsk_..." autocomplete="off" />
-              <button id="toggle-key-visibility" type="button" class="btn icon" title="Mostrar/ocultar">👁️</button>
+            <div id="inputsCat" class="list" style="display:none">
+              <div>
+                <label>Hipotenusa c (unidades)</label>
+                <input id="cInput" type="number" step="any" min="0" placeholder="ex.: 5" />
+              </div>
+              <div>
+                <label>Cateto conhecido (unidades)</label>
+                <input id="catKonInput" type="number" step="any" min="0" placeholder="ex.: 4" />
+              </div>
             </div>
-            <small class="muted">A chave é armazenada no seu navegador (localStorage).</small>
-          </div>
 
-          <div class="form-control">
-            <label for="system-prompt">Instruções do sistema (opcional)</label>
-            <textarea id="system-prompt" rows="3" placeholder="Você é o BacanAI, um assistente útil, direto e bacana."></textarea>
+            <div class="row">
+              <button class="btn" id="btnCalcularP">Calcular</button>
+              <button class="btn ghost" id="btnLimparP">Limpar</button>
+            </div>
+
+            <div id="resultadoP" class="note muted">Preencha os campos e clique em Calcular.</div>
           </div>
         </div>
 
-        <footer class="modal-footer">
-          <button id="btn-cancel-settings" class="btn secondary" type="button">Cancelar</button>
-          <button id="btn-save-settings" class="btn primary" type="button">Salvar</button>
-        </footer>
+        <div class="span-6">
+          <h3>Desafio rápido (opcional)</h3>
+          <p class="muted">Resolva usando Pitágoras e verifique sua resposta.</p>
+          <div id="desafioP" class="list">
+            <div id="textoDesafioP" class="note">Clique em "Gerar desafio".</div>
+            <div class="row">
+              <input id="respostaDesafioP" type="number" step="any" placeholder="sua resposta" />
+              <button class="btn success" id="btnVerificarDesafioP">Verificar</button>
+              <button class="btn secondary" id="btnGerarDesafioP">Gerar desafio</button>
+            </div>
+            <div id="feedbackDesafioP" class="note"></div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Toasts / Notificações -->
-    <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
-
-    <noscript>
-      <div class="noscript">
-        Este app precisa de JavaScript para funcionar. Por favor, ative o JavaScript no seu navegador.
+    <!-- CASOS TRIANGULARES -->
+    <section id="triangulos" class="card">
+      <h2>🔺 Casos de congruência de triângulos</h2>
+      <p>Dois triângulos são congruentes quando têm exatamente a mesma forma e tamanho. Alguns casos garantem a congruência:</p>
+      <div class="grid">
+        <div class="span-4">
+          <div class="note">
+            <b>LLL</b> — Lado, Lado, Lado.
+            <br>Os três lados correspondentes são iguais.
+          </div>
+        </div>
+        <div class="span-4">
+          <div class="note">
+            <b>LAL</b> — Lado, Ângulo, Lado.
+            <br>Dois lados e o ângulo entre eles são iguais.
+          </div>
+        </div>
+        <div class="span-4">
+          <div class="note">
+            <b>ALA</b> — Ângulo, Lado, Ângulo.
+            <br>Dois ângulos e o lado entre eles são iguais.
+          </div>
+        </div>
+        <div class="span-4">
+          <div class="note">
+            <b>AAS</b> — Ângulo, Ângulo, Lado.
+            <br>Dois ângulos e um lado não-incluso são iguais.
+          </div>
+        </div>
+        <div class="span-8">
+          <div class="note">
+            <b>HC</b> — Hipotenusa e Cateto (caso especial para triângulos retângulos).
+            <br>Se a hipotenusa e um cateto correspondentes são iguais, os triângulos são congruentes.
+          </div>
+        </div>
       </div>
-    </noscript>
 
-    <script defer src="script.js"></script>
-  </body>
+      <div class="grid" style="margin-top:14px">
+        <div class="span-12">
+          <h3>Atividade: Qual caso se aplica?</h3>
+          <div id="quizTri" class="list">
+            <div class="status">
+              <div><span class="badge">Quiz</span> <span id="triProgresso" class="muted">—</span></div>
+              <div id="triPlacar" class="muted"></div>
+            </div>
+            <div id="triPergunta" class="note">Clique em "Iniciar quiz".</div>
+            <div id="triOpcoes" class="options"></div>
+            <div class="row">
+              <button class="btn" id="triIniciar">Iniciar quiz</button>
+              <button class="btn secondary" id="triProxima" disabled>Próxima</button>
+              <button class="btn ghost" id="triReiniciar" style="display:none">Reiniciar</button>
+            </div>
+            <div id="triFeedback" class="note muted"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBABILIDADE -->
+    <section id="probabilidade" class="card">
+      <h2>🎲 Probabilidade</h2>
+      <p>
+        A probabilidade de um evento é dada por P = casos favoráveis / casos possíveis, quando os resultados são equiprováveis.
+        Ex.: a chance teórica de sair um número par em um dado honesto é 3/6 = 1/2 = 50%.
+      </p>
+
+      <h3>Atividade: Simulador de moeda e dado</h3>
+      <div class="grid">
+        <div class="span-6">
+          <div class="list">
+            <div class="row">
+              <div style="flex:1; min-width:180px">
+                <label for="tipoSorteio">Experimento</label>
+                <select id="tipoSorteio">
+                  <option value="moeda">Moeda (cara/coroa)</option>
+                  <option value="dado">Dado (1 a 6)</option>
+                </select>
+              </div>
+              <div style="flex:1; min-width:160px">
+                <label for="qtdLanc">Número de lançamentos</label>
+                <input id="qtdLanc" type="number" min="1" max="50000" value="200" />
+              </div>
+            </div>
+            <label class="row" style="gap:8px">
+              <input id="acumular" type="checkbox" />
+              Acumular lançamentos
+            </label>
+            <div class="row">
+              <button class="btn" id="btnLancar">Lançar</button>
+              <button class="btn ghost" id="btnResetar">Resetar</button>
+            </div>
+            <div id="resumoProb" class="note muted">Escolha o experimento e lance para ver os resultados.</div>
+          </div>
+        </div>
+
+        <div class="span-6">
+          <div class="bars" id="barrasProb"></div>
+          <div class="details" id="detalhesProb"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Feito com ❤ para aprender praticando. Dica: pressione <span class="kbd">Ctrl</span> + <span class="kbd">L</span> para focar a barra de endereços e recarregar.
+  </footer>
+
+  <script>
+    // Utilidades
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+    const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
+    const arred2 = (n) => {
+      if (Number.isNaN(n)) return "—";
+      const s = Math.round((n + Number.EPSILON) * 100) / 100;
+      return s.toLocaleString('pt-BR', {maximumFractionDigits: 2});
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // =============== PITÁGORAS ===============
+      const tipoCalculoP = $('#tipoCalculoP');
+      const inputsHip = $('#inputsHip');
+      const inputsCat = $('#inputsCat');
+      const aInput = $('#aInput');
+      const bInput = $('#bInput');
+      const cInput = $('#cInput');
+      const catKonInput = $('#catKonInput');
+      const btnCalcularP = $('#btnCalcularP');
+      const btnLimparP = $('#btnLimparP');
+      const resultadoP = $('#resultadoP');
+
+      const textoDesafioP = $('#textoDesafioP');
+      const respostaDesafioP = $('#respostaDesafioP');
+      const feedbackDesafioP = $('#feedbackDesafioP');
+      const btnGerarDesafioP = $('#btnGerarDesafioP');
+      const btnVerificarDesafioP = $('#btnVerificarDesafioP');
+
+      tipoCalculoP.addEventListener('change', () => {
+        if (tipoCalculoP.value === 'c') {
+          inputsHip.style.display = '';
+          inputsCat.style.display = 'none';
+        } else {
+          inputsHip.style.display = 'none';
+          inputsCat.style.display = '';
+        }
+        resultadoP.textContent = 'Preencha os campos e clique em Calcular.';
+      });
+
+      btnLimparP.addEventListener('click', () => {
+        [aInput,bInput,cInput,catKonInput].forEach(i => i.value = '');
+        resultadoP.textContent = 'Campos limpos. Preencha e calcule!';
+      });
+
+      btnCalcularP.addEventListener('click', () => {
+        const tipo = tipoCalculoP.value;
+        if (tipo === 'c') {
+          const a = parseFloat(aInput.value);
+          const b = parseFloat(bInput.value);
+          if (!(a>0) || !(b>0)) {
+            resultadoP.innerHTML = '<span class="no">Informe valores positivos para a e b.</span>';
+            return;
+          }
+          const c = Math.sqrt(a*a + b*b);
+          resultadoP.innerHTML = `
+            <div><b>Passos:</b></div>
+            <div>a² + b² = c² → ${arred2(a)}² + ${arred2(b)}² = c²</div>
+            <div>${arred2(a*a)} + ${arred2(b*b)} = c² → c² = ${arred2(a*a + b*b)}</div>
+            <div>c = √${arred2(a*a + b*b)} = <b>${arred2(c)}</b></div>
+          `;
+        } else {
+          const c = parseFloat(cInput.value);
+          const k = parseFloat(catKonInput.value);
+          if (!(c>0) || !(k>0)) {
+            resultadoP.innerHTML = '<span class="no">Informe valores positivos para c e o cateto conhecido.</span>';
+            return;
+          }
+          if (k >= c) {
+            resultadoP.innerHTML = '<span class="no">A hipotenusa precisa ser maior que qualquer cateto.</span>';
+            return;
+          }
+          const x2 = c*c - k*k;
+          if (x2 < 0) {
+            resultadoP.innerHTML = '<span class="no">Valores inválidos: c² deve ser maior que o quadrado do cateto.</span>';
+            return;
+          }
+          const x = Math.sqrt(x2);
+          resultadoP.innerHTML = `
+            <div><b>Passos:</b></div>
+            <div>k² + x² = c² → x² = c² - k²</div>
+            <div>x² = ${arred2(c)}² - ${arred2(k)}² = ${arred2(c*c)} - ${arred2(k*k)} = ${arred2(x2)}</div>
+            <div>x = √${arred2(x2)} = <b>${arred2(x)}</b></div>
+          `;
+        }
+      });
+
+      // Desafios Pitágoras (usando triplas pitagóricas para respostas inteiras)
+      const triplas = [
+        [3,4,5],[5,12,13],[6,8,10],[7,24,25],[8,15,17],[9,12,15],[9,40,41],[10,24,26],[12,16,20],[12,35,37]
+      ];
+      let desafioAtual = null; // {tipo, a, b, c, resposta}
+      function gerarDesafio(){
+        const [a,b,c] = triplas[Math.floor(Math.random()*triplas.length)];
+        const tipo = Math.random()<0.5 ? 'c' : 'cateto';
+        if (tipo==='c'){
+          desafioAtual = {tipo, a,b,c, resposta:c, enunciado:`Dados os catetos a = ${a} e b = ${b}, calcule a hipotenusa c.`};
+        } else {
+          // esconder aleatoriamente a ou b
+          const esconderA = Math.random()<0.5;
+          const catKon = esconderA? b : a;
+          const x = esconderA? a : b;
+          desafioAtual = {tipo, a,b,c, resposta:x, enunciado:`Em um triângulo retângulo com hipotenusa c = ${c} e um cateto = ${catKon}, calcule o outro cateto.`};
+        }
+        textoDesafioP.textContent = desafioAtual.enunciado;
+        respostaDesafioP.value = '';
+        feedbackDesafioP.textContent = '';
+      }
+      btnGerarDesafioP.addEventListener('click', gerarDesafio);
+      btnVerificarDesafioP.addEventListener('click', () => {
+        if (!desafioAtual){
+          feedbackDesafioP.innerHTML = '<span class="muted">Primeiro, clique em "Gerar desafio".</span>';
+          return;
+        }
+        const resp = parseFloat(respostaDesafioP.value);
+        if (!(resp>0)){
+          feedbackDesafioP.innerHTML = '<span class="no">Digite sua resposta.</span>';
+          return;
+        }
+        const ok = Math.abs(resp - desafioAtual.resposta) <= 0.05; // tolerância pequena
+        if (ok){
+          feedbackDesafioP.innerHTML = `✅ <b>Correto!</b> Resposta: ${desafioAtual.resposta}.`;
+        } else {
+          feedbackDesafioP.innerHTML = `❌ <b>Não foi dessa vez.</b> Resposta correta: ${desafioAtual.resposta}.`;
+        }
+      });
+
+      // =============== QUIZ TRIÂNGULOS ===============
+      const triPergunta = $('#triPergunta');
+      const triOpcoes = $('#triOpcoes');
+      const triFeedback = $('#triFeedback');
+      const triIniciar = $('#triIniciar');
+      const triProxima = $('#triProxima');
+      const triReiniciar = $('#triReiniciar');
+      const triProgresso = $('#triProgresso');
+      const triPlacar = $('#triPlacar');
+
+      const bancoTri = [
+        {q:'Dois triângulos possuem três lados correspondentes iguais.', a:'LLL', opts:['LLL','LAL','ALA','HC'], e:'LLL: três lados iguais garantem congruência.'},
+        {q:'Dois lados e o ângulo entre eles são iguais.', a:'LAL', opts:['LLL','LAL','ALA','AAS'], e:'LAL: lado-ângulo-lado.'},
+        {q:'Dois ângulos e o lado entre eles são iguais.', a:'ALA', opts:['ALA','LLL','HC','LAL'], e:'ALA: ângulo-lado-ângulo (lado incluso).'},
+        {q:'Dois ângulos e um lado não-incluso são iguais.', a:'AAS', opts:['AAS','ALA','LAL','LLL'], e:'AAS: ângulo-ângulo-lado (lado não-incluso).'},
+        {q:'Em triângulos retângulos, hipotenusa e um cateto correspondentes são iguais.', a:'HC', opts:['HC','LLL','LAL','ALA'], e:'HC (hipotenusa-cateto) é um caso especial.'},
+        {q:'Os lados correspondentes medem 5 cm, 8 cm e 11 cm em ambos os triângulos.', a:'LLL', opts:['LLL','LAL','ALA','HC'], e:'Três lados iguais → LLL.'},
+        {q:'Um lado de 7 cm em comum e dois ângulos de 45° e 60° iguais.', a:'ALA', opts:['ALA','AAS','LAL','HC'], e:'Ângulo-lado-ângulo (lado incluso) → ALA.'},
+        {q:'Ângulos de 40° e 60° iguais e um lado não-incluso igual.', a:'AAS', opts:['AAS','ALA','LAL','LLL'], e:'Ângulo-ângulo-lado → AAS.'},
+        {q:'Triângulos retângulos com hipotenusa 13 e cateto 5 correspondentes iguais.', a:'HC', opts:['HC','LAL','LLL','ALA'], e:'No retângulo, HC garante congruência.'}
+      ];
+
+      let triEstado = {
+        ordem: [], i: 0, acertos: 0, final:false
+      };
+      function shuffle(arr){
+        const a = [...arr];
+        for(let i=a.length-1;i>0;i--){
+          const j = Math.floor(Math.random()*(i+1));
+          [a[i],a[j]]=[a[j],a[i]];
+        }
+        return a;
+      }
+      function iniciarQuiz(){
+        triEstado.ordem = shuffle(bancoTri).slice(0,5);
+        triEstado.i = 0; triEstado.acertos = 0; triEstado.final = false;
+        triIniciar.disabled = true;
+        triProxima.disabled = true;
+        triReiniciar.style.display = 'none';
+        triFeedback.textContent = 'Leia e escolha a alternativa correta.';
+        triPlacar.textContent = `Acertos: 0`;
+        renderPergunta();
+      }
+      function renderPergunta(){
+        const idx = triEstado.i;
+        const tot = triEstado.ordem.length;
+        triProgresso.textContent = `Pergunta ${idx+1} de ${tot}`;
+        const item = triEstado.ordem[idx];
+        triPergunta.textContent = item.q;
+        triOpcoes.innerHTML = '';
+        const opts = shuffle(item.opts);
+        opts.forEach(op => {
+          const div = document.createElement('button');
+          div.className = 'option';
+          div.type = 'button';
+          div.textContent = op;
+          div.addEventListener('click', () => escolherOpcao(op, item.a, item.e, div));
+          triOpcoes.appendChild(div);
+        });
+      }
+      function escolherOpcao(op, correta, exp, el){
+        // desabilitar todas
+        $$('.option', triOpcoes).forEach(b => b.disabled = true);
+        if (op === correta){
+          el.classList.add('correct');
+          triEstado.acertos++;
+          triFeedback.innerHTML = `✅ Correto! ${exp}`;
+        } else {
+          el.classList.add('wrong');
+          // marcar a correta
+          $$('.option', triOpcoes).find(b => b.textContent === correta)?.classList.add('correct');
+          triFeedback.innerHTML = `❌ Não exatamente. ${exp}`;
+        }
+        triPlacar.textContent = `Acertos: ${triEstado.acertos}`;
+        triProxima.disabled = false;
+      }
+      function proximaPergunta(){
+        if (triEstado.i < triEstado.ordem.length - 1){
+          triEstado.i++;
+          triProxima.disabled = true;
+          triFeedback.textContent = '';
+          renderPergunta();
+        } else {
+          finalizarQuiz();
+        }
+      }
+      function finalizarQuiz(){
+        triEstado.final = true;
+        triPergunta.innerHTML = `Fim do quiz! Você acertou <b>${triEstado.acertos}</b> de <b>${triEstado.ordem.length}</b>.`;
+        triOpcoes.innerHTML = '';
+        triFeedback.innerHTML = `Dica: revise os casos e tente novamente.`;
+        triProxima.disabled = true;
+        triReiniciar.style.display = '';
+        triIniciar.disabled = false;
+      }
+      triIniciar.addEventListener('click', iniciarQuiz);
+      triProxima.addEventListener('click', proximaPergunta);
+      triReiniciar.addEventListener('click', iniciarQuiz);
+
+      // =============== PROBABILIDADE ===============
+      const tipoSorteio = $('#tipoSorteio');
+      const qtdLanc = $('#qtdLanc');
+      const acumular = $('#acumular');
+      const btnLancar = $('#btnLancar');
+      const btnResetar = $('#btnResetar');
+      const barrasProb = $('#barrasProb');
+      const detalhesProb = $('#detalhesProb');
+      const resumoProb = $('#resumoProb');
+
+      let contagem = {};
+      let total = 0;
+
+      function initContagem(){
+        if (tipoSorteio.value === 'moeda'){
+          contagem = {Cara:0, Coroa:0};
+        } else {
+          contagem = {1:0,2:0,3:0,4:0,5:0,6:0};
+        }
+        total = 0;
+      }
+      initContagem();
+
+      function teorico(){
+        if (tipoSorteio.value === 'moeda'){
+          return {Cara:0.5, Coroa:0.5};
+        } else {
+          return {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6};
+        }
+      }
+
+      function atualizarUI(){
+        // Barras
+        barrasProb.innerHTML = '';
+        const keys = Object.keys(contagem);
+        const maxFreq = Math.max(1, ...keys.map(k => contagem[k]));
+        keys.forEach(k => {
+          const freq = contagem[k];
+          const perc = total ? (freq/total)*100 : 0;
+          const h = total ? clamp((freq / maxFreq)*100, 4, 100) : 4;
+          const bar = document.createElement('div');
+          bar.className = 'bar';
+          bar.innerHTML = `
+            <div class="col" style="height:${h}%"></div>
+            <div class="label">${k}</div>
+            <div class="muted">${perc.toFixed(1)}%</div>
+          `;
+          barrasProb.appendChild(bar);
+        });
+
+        // Detalhes e resumo
+        const te = teorico();
+        let html = '';
+        keys.forEach(k => {
+          const freq = contagem[k];
+          const pExp = total ? (freq/total) : 0;
+          const pTeo = te[k];
+          const diff = Math.abs(pExp - pTeo);
+          html += `
+            <div class="row">
+              <div><b>${k}</b></div>
+              <div class="muted">Contagem: ${freq} • P(exp): ${(pExp*100).toFixed(1)}% • P(teo): ${(pTeo*100).toFixed(1)}% • Δ ${(diff*100).toFixed(1)}%</div>
+            </div>
+          `;
+        });
+        detalhesProb.innerHTML = html || '<span class="muted">Sem dados ainda.</span>';
+
+        resumoProb.innerHTML = total
+          ? `Total de lançamentos: <b>${total}</b>. Aproxime-se da probabilidade teórica aumentando o número de lançamentos.`
+          : 'Escolha o experimento e lance para ver os resultados.';
+      }
+
+      function lancar(){
+        let n = parseInt(qtdLanc.value,10);
+        if (!Number.isFinite(n) || n < 1) n = 1;
+        n = Math.min(n, 50000);
+        if (!acumular.checked) initContagem();
+
+        if (tipoSorteio.value === 'moeda'){
+          for (let i=0;i<n;i++){
+            const r = Math.random() < 0.5 ? 'Cara' : 'Coroa';
+            contagem[r]++; total++;
+          }
+        } else {
+          for (let i=0;i<n;i++){
+            const r = 1 + Math.floor(Math.random()*6);
+            contagem[r]++; total++;
+          }
+        }
+        atualizarUI();
+      }
+      btnLancar.addEventListener('click', lancar);
+      btnResetar.addEventListener('click', () => { initContagem(); atualizarUI(); });
+
+      // primeira renderização
+      atualizarUI();
+
+      // trocar experimento reseta contagem
+      tipoSorteio.addEventListener('change', () => { initContagem(); atualizarUI(); });
+    });
+  </script>
+</body>
 </html>

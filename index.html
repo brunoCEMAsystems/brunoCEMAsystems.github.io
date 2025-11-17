@@ -151,6 +151,8 @@
         <a href="#pitagoras">📐 Pitágoras</a>
         <a href="#triangulos">🔺 Casos Triangulares</a>
         <a href="#probabilidade">🎲 Probabilidade</a>
+        <a href="#afim">📊 Função Afim</a>
+        <a href="#proporcional">⚖️ Proporcional</a>
       </nav>
     </div>
   </header>
@@ -225,6 +227,142 @@
         </div>
       </div>
     </section>
+    <!-- FUNÇÃO AFIM -->
+<section id="afim" class="card">
+  <h2>📊 Função Afim (y = ax + b)</h2>
+  <p>
+    A função afim tem a forma y = ax + b, onde:
+    a é o coeficiente angular (taxa de variação) e b é a ordenada na origem (valor quando x = 0).
+    • Se a > 0, a função é crescente. • Se a < 0, é decrescente. • Se a = 0, é constante.
+  </p>
+
+  <div class="grid">
+    <div class="span-6">
+      <h3>Calculadora y = ax + b</h3>
+      <div class="list">
+        <div class="row">
+          <div style="flex:1">
+            <label>Coeficiente a</label>
+            <input id="af_a" type="number" step="any" placeholder="ex.: 2" />
+          </div>
+          <div style="flex:1">
+            <label>Intercepto b</label>
+            <input id="af_b" type="number" step="any" placeholder="ex.: -3" />
+          </div>
+        </div>
+        <div class="row">
+          <div style="flex:1">
+            <label>Valor de x</label>
+            <input id="af_x" type="number" step="any" placeholder="ex.: 4" />
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn" id="af_calc">Calcular y</button>
+          <button class="btn ghost" id="af_limpar">Limpar</button>
+        </div>
+        <div id="af_res" class="note muted">Informe a, b e (opcionalmente) x para calcular y e ver propriedades.</div>
+      </div>
+    </div>
+
+    <div class="span-6">
+      <h3>Descobrir a e b por dois pontos</h3>
+      <div class="list">
+        <div class="row">
+          <div style="flex:1"><label>x₁</label><input id="af_x1" type="number" step="any" /></div>
+          <div style="flex:1"><label>y₁</label><input id="af_y1" type="number" step="any" /></div>
+        </div>
+        <div class="row">
+          <div style="flex:1"><label>x₂</label><input id="af_x2" type="number" step="any" /></div>
+          <div style="flex:1"><label>y₂</label><input id="af_y2" type="number" step="any" /></div>
+        </div>
+        <div class="row">
+          <button class="btn" id="af_doisPontos">Calcular a e b</button>
+        </div>
+        <div id="af_res2" class="note muted">Informe dois pontos distintos (x₁ ≠ x₂).</div>
+      </div>
+    </div>
+
+    <div class="span-12">
+      <h3>Gerar tabela de valores</h3>
+      <div class="row" style="gap:10px">
+        <div style="flex:1; min-width:120px"><label>x inicial</label><input id="af_xini" type="number" step="any" value="-2" /></div>
+        <div style="flex:1; min-width:120px"><label>x final</label><input id="af_xfim" type="number" step="any" value="2" /></div>
+        <div style="flex:1; min-width:120px"><label>Passo</label><input id="af_passo" type="number" step="any" value="1" /></div>
+        <button class="btn" id="af_tabela">Gerar</button>
+      </div>
+      <div id="af_tab" class="note muted">A tabela usa os valores atuais de a e b.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNÇÃO PROPORCIONAL -->
+<section id="proporcional" class="card">
+  <h2>⚖️ Função Proporcional (y = kx)</h2>
+  <p>
+    A função proporcional é um caso particular da função afim, com b = 0: y = kx.
+    Ela passa pela origem (0,0) e a razão y/x é constante e igual a k.
+  </p>
+
+  <div class="grid">
+    <div class="span-6">
+      <h3>Calculadora y = kx</h3>
+      <div class="list">
+        <div class="row">
+          <div style="flex:1"><label>Constante k</label><input id="prop_k" type="number" step="any" placeholder="ex.: 1.5" /></div>
+          <div style="flex:1"><label>Valor de x</label><input id="prop_x" type="number" step="any" placeholder="ex.: 8" /></div>
+        </div>
+        <div class="row">
+          <button class="btn" id="prop_calc">Calcular y</button>
+          <button class="btn ghost" id="prop_limpar">Limpar</button>
+        </div>
+        <div id="prop_res" class="note muted">Informe k e x.</div>
+      </div>
+    </div>
+
+    <div class="span-6">
+      <h3>Descobrir k ou testar proporcionalidade</h3>
+      <div class="list">
+        <div class="row">
+          <div style="flex:1"><label>x₁</label><input id="prop_x1" type="number" step="any" /></div>
+          <div style="flex:1"><label>y₁</label><input id="prop_y1" type="number" step="any" /></div>
+        </div>
+        <div class="row">
+          <div style="flex:1"><label>x₂</label><input id="prop_x2" type="number" step="any" /></div>
+          <div style="flex:1"><label>y₂</label><input id="prop_y2" type="number" step="any" /></div>
+        </div>
+        <div class="row">
+          <button class="btn" id="prop_k_btn">Calcular k</button>
+          <button class="btn secondary" id="prop_test_btn">Testar proporcionalidade</button>
+        </div>
+        <div id="prop_res2" class="note muted">Preencha um par para calcular k, ou dois pares para testar.</div>
+      </div>
+    </div>
+
+    <div class="span-12">
+      <h3>Regra de três simples (diretamente proporcional)</h3>
+      <div class="list">
+        <div class="row">
+          <div style="flex:1"><label>a</label><input id="prop_a" type="number" step="any" placeholder="ex.: 3" /></div>
+          <div style="flex:1"><label>b</label><input id="prop_b" type="number" step="any" placeholder="ex.: 12" /></div>
+          <div style="flex:1"><label>c</label><input id="prop_c" type="number" step="any" placeholder="ex.: 5" /></div>
+          <div class="row" style="align-items:flex-end"><button class="btn" id="prop_regra3">Calcular x</button></div>
+        </div>
+        <div id="prop_res3" class="note muted">Interpretação: a está para b assim como c está para x. Se são grandezas diretamente proporcionais, x = (b · c) / a.</div>
+      </div>
+    </div>
+
+    <div class="span-12">
+      <h3>Gerar tabela de valores</h3>
+      <div class="row" style="gap:10px">
+        <div style="flex:1; min-width:120px"><label>x inicial</label><input id="prop_xini" type="number" step="any" value="-3" /></div>
+        <div style="flex:1; min-width:120px"><label>x final</label><input id="prop_xfim" type="number" step="any" value="3" /></div>
+        <div style="flex:1; min-width:120px"><label>Passo</label><input id="prop_passo" type="number" step="any" value="1" /></div>
+        <button class="btn" id="prop_tabela">Gerar</button>
+      </div>
+      <div id="prop_tab" class="note muted">A tabela usa o k atual.</div>
+    </div>
+  </div>
+</section>
 
     <!-- CASOS TRIANGULARES -->
     <section id="triangulos" class="card">
@@ -659,6 +797,309 @@
 
       // trocar experimento reseta contagem
       tipoSorteio.addEventListener('change', () => { initContagem(); atualizarUI(); });
+      // =============== FUNÇÃO AFIM (y = ax + b) ===============
+const EPS = 1e-9;
+const af_a = $('#af_a');
+const af_b = $('#af_b');
+const af_x = $('#af_x');
+const af_calc = $('#af_calc');
+const af_limpar = $('#af_limpar');
+const af_res = $('#af_res');
+
+const af_x1 = $('#af_x1');
+const af_y1 = $('#af_y1');
+const af_x2 = $('#af_x2');
+const af_y2 = $('#af_y2');
+const af_doisPontos = $('#af_doisPontos');
+const af_res2 = $('#af_res2');
+
+const af_xini = $('#af_xini');
+const af_xfim = $('#af_xfim');
+const af_passo = $('#af_passo');
+const af_tabela = $('#af_tabela');
+const af_tab = $('#af_tab');
+
+function classifAfim(a){
+  return a > 0 ? 'crescente' : (a < 0 ? 'decrescente' : 'constante');
+}
+function sinal(n){ return n >= 0 ? '+' : '−'; }
+
+function calcularAfim(){
+  const a = parseFloat(af_a.value);
+  const b = parseFloat(af_b.value);
+  const temA = Number.isFinite(a);
+  const temB = Number.isFinite(b);
+  if (!temA || !temB){
+    af_res.innerHTML = '<span class="no">Informe valores válidos para a e b.</span>';
+    return;
+  }
+  const tipo = classifAfim(a);
+  const ehProporcional = Math.abs(b) <= EPS;
+  let html = `
+    <div><b>Função:</b> y = ${arred2(a)}x ${sinal(b)} ${arred2(Math.abs(b))}</div>
+    <div><b>Variação:</b> ${tipo}${ehProporcional ? ' • (b = 0 ⇒ também é proporcional)' : ''}</div>
+    <div><b>Intercepto em y:</b> y(0) = ${arred2(b)}</div>
+  `;
+  if (Math.abs(a) > EPS){
+    const x0 = -b/a;
+    html += `<div><b>Raiz (intercepto em x):</b> x = −b/a = ${arred2(x0)}</div>`;
+  } else {
+    html += (Math.abs(b) <= EPS)
+      ? `<div><b>Raiz:</b> todos os x (função nula: y = 0)</div>`
+      : `<div><b>Raiz:</b> não existe (função constante y = ${arred2(b)})</div>`;
+  }
+  const x = parseFloat(af_x.value);
+  if (Number.isFinite(x)){
+    const y = a*x + b;
+    html += `
+      <div style="margin-top:6px"><b>Cálculo para x = ${arred2(x)}:</b></div>
+      <div>y = ${arred2(a)}·${arred2(x)} ${sinal(b)} ${arred2(Math.abs(b))} = <b>${arred2(y)}</b></div>
+    `;
+  }
+  af_res.innerHTML = html;
+}
+
+function calcAfimPorDoisPontos(){
+  const x1 = parseFloat(af_x1.value), y1 = parseFloat(af_y1.value);
+  const x2 = parseFloat(af_x2.value), y2 = parseFloat(af_y2.value);
+  if (![x1,y1,x2,y2].every(Number.isFinite)){
+    af_res2.innerHTML = '<span class="no">Preencha x₁, y₁, x₂ e y₂.</span>';
+    return;
+  }
+  if (Math.abs(x2 - x1) <= EPS){
+    if (Math.abs(y2 - y1) <= EPS){
+      af_res2.innerHTML = '<span class="no">Pontos coincidentes — forneça dois pontos distintos.</span>';
+    } else {
+      af_res2.innerHTML = '<span class="no">x₁ = x₂ ⇒ reta vertical (não é do tipo y = ax + b).</span>';
+    }
+    return;
+  }
+  const a = (y2 - y1) / (x2 - x1);
+  const b = y1 - a*x1;
+  af_a.value = a; // não usar arred2 em inputs number
+  af_b.value = b;
+
+  af_res2.innerHTML = `
+    <div><b>Cálculo de a:</b> (y₂ − y₁)/(x₂ − x₁) = (${arred2(y2)} − ${arred2(y1)})/(${arred2(x2)} − ${arred2(x1)}) = <b>${arred2(a)}</b></div>
+    <div><b>Cálculo de b:</b> y₁ − a·x₁ = ${arred2(y1)} − ${arred2(a)}·${arred2(x1)} = <b>${arred2(b)}</b></div>
+    <div><b>Função:</b> y = ${arred2(a)}x ${sinal(b)} ${arred2(Math.abs(b))}</div>
+  `;
+  // Atualiza painel principal, se desejar
+  calcularAfim();
+}
+
+function gerarTabelaAfim(){
+  const a = parseFloat(af_a.value);
+  const b = parseFloat(af_b.value);
+  if (!Number.isFinite(a) || !Number.isFinite(b)){
+    af_tab.innerHTML = '<span class="no">Defina a e b para gerar a tabela.</span>';
+    return;
+  }
+  let xi = parseFloat(af_xini.value);
+  let xf = parseFloat(af_xfim.value);
+  let p = parseFloat(af_passo.value);
+  if (![xi,xf,p].every(Number.isFinite) || Math.abs(p) <= EPS){
+    af_tab.innerHTML = '<span class="no">Verifique x inicial, x final e o passo (passo ≠ 0).</span>';
+    return;
+  }
+  const dir = xf >= xi ? 1 : -1;
+  p = Math.abs(p) * dir;
+  let x = xi, count = 0;
+  let html = '';
+  html += '<div class="list">';
+  while ((dir > 0 ? x <= xf + 1e-12 : x >= xf - 1e-12) && count < 1000){
+    const y = a*x + b;
+    html += `
+      <div class="row">
+        <div>x = <b>${arred2(x)}</b></div>
+        <div class="muted">y = ${arred2(y)}</div>
+      </div>
+    `;
+    x += p; count++;
+  }
+  html += '</div>';
+  af_tab.innerHTML = html || '<span class="muted">Sem pontos.</span>';
+}
+
+af_calc?.addEventListener('click', calcularAfim);
+af_limpar?.addEventListener('click', () => {
+  [af_a,af_b,af_x,af_x1,af_y1,af_x2,af_y2,af_xini,af_xfim,af_passo].forEach(i => i && (i.value = ''));
+  af_res.innerHTML = 'Informe a, b e (opcionalmente) x para calcular y e ver propriedades.';
+  af_res2.innerHTML = 'Informe dois pontos distintos (x₁ ≠ x₂).';
+  af_tab.innerHTML = 'A tabela usa os valores atuais de a e b.';
+});
+af_doisPontos?.addEventListener('click', calcAfimPorDoisPontos);
+af_tabela?.addEventListener('click', gerarTabelaAfim);
+
+// =============== FUNÇÃO PROPORCIONAL (y = kx) ===============
+const prop_k = $('#prop_k');
+const prop_x = $('#prop_x');
+const prop_calc = $('#prop_calc');
+const prop_limpar = $('#prop_limpar');
+const prop_res = $('#prop_res');
+
+const prop_x1 = $('#prop_x1');
+const prop_y1 = $('#prop_y1');
+const prop_x2 = $('#prop_x2');
+const prop_y2 = $('#prop_y2');
+const prop_k_btn = $('#prop_k_btn');
+const prop_test_btn = $('#prop_test_btn');
+const prop_res2 = $('#prop_res2');
+
+const prop_a = $('#prop_a');
+const prop_b = $('#prop_b');
+const prop_c = $('#prop_c');
+const prop_regra3 = $('#prop_regra3');
+const prop_res3 = $('#prop_res3');
+
+const prop_xini = $('#prop_xini');
+const prop_xfim = $('#prop_xfim');
+const prop_passo = $('#prop_passo');
+const prop_tabela = $('#prop_tabela');
+const prop_tab = $('#prop_tab');
+
+function calcProporcional(){
+  const k = parseFloat(prop_k.value);
+  const x = parseFloat(prop_x.value);
+  if (!Number.isFinite(k) || !Number.isFinite(x)){
+    prop_res.innerHTML = '<span class="no">Informe k e x válidos.</span>';
+    return;
+  }
+  const y = k * x;
+  const tipo = k > 0 ? 'crescente' : (k < 0 ? 'decrescente' : 'constante (y = 0)');
+  prop_res.innerHTML = `
+    <div><b>Função:</b> y = ${arred2(k)}x</div>
+    <div><b>Variação:</b> ${tipo} • <b>Passa pela origem</b></div>
+    <div style="margin-top:6px"><b>Cálculo:</b> y = ${arred2(k)}·${arred2(x)} = <b>${arred2(y)}</b></div>
+  `;
+}
+
+function kFromPair(x, y){
+  if (Math.abs(x) <= EPS){
+    if (Math.abs(y) <= EPS) return {k: null, ok: true, reason: 'Ponto (0,0) é compatível com qualquer k.'};
+    return {k: null, ok: false, reason: 'Se x = 0, é necessário y = 0 para ser proporcional.'};
+  }
+  return {k: y/x, ok: true};
+}
+
+function calcK(){
+  const x1 = parseFloat(prop_x1.value), y1 = parseFloat(prop_y1.value);
+  if (![x1,y1].every(Number.isFinite)){
+    prop_res2.innerHTML = '<span class="no">Preencha x₁ e y₁.</span>';
+    return;
+  }
+  const r1 = kFromPair(x1,y1);
+  if (!r1.ok){
+    prop_res2.innerHTML = `<span class="no">${r1.reason}</span>`;
+    return;
+  }
+  if (r1.k === null){
+    prop_res2.innerHTML = 'O par (0,0) é insuficiente para determinar k. Informe outro par com x ≠ 0.';
+    return;
+  }
+  prop_k.value = r1.k;
+  prop_res2.innerHTML = `
+    <div><b>k = y/x</b> = ${arred2(y1)} / ${arred2(x1)} = <b>${arred2(r1.k)}</b></div>
+    <div>Função: y = ${arred2(r1.k)}x</div>
+  `;
+}
+
+function testProporcional(){
+  const x1 = parseFloat(prop_x1.value), y1 = parseFloat(prop_y1.value);
+  const x2 = parseFloat(prop_x2.value), y2 = parseFloat(prop_y2.value);
+  if (![x1,y1,x2,y2].every(Number.isFinite)){
+    prop_res2.innerHTML = '<span class="no">Preencha os dois pares: (x₁,y₁) e (x₂,y₂).</span>';
+    return;
+  }
+  const r1 = kFromPair(x1,y1);
+  const r2 = kFromPair(x2,y2);
+  // Casos impossíveis
+  if (!r1.ok || !r2.ok){
+    prop_res2.innerHTML = `<span class="no">${!r1.ok ? r1.reason : r2.reason}</span>`;
+    return;
+  }
+  // Ambos (0,0)
+  if (r1.k === null && r2.k === null){
+    prop_res2.innerHTML = 'Ambos os pontos são (0,0). É compatível com y = kx, mas k continua indeterminado.';
+    return;
+  }
+  // Um (0,0) e outro regular
+  if (r1.k === null && r2.k !== null){
+    prop_res2.innerHTML = `Proporcional com k = ${arred2(r2.k)}. O ponto (0,0) é compatível.`;
+    return;
+  }
+  if (r2.k === null && r1.k !== null){
+    prop_res2.innerHTML = `Proporcional com k = ${arred2(r1.k)}. O ponto (0,0) é compatível.`;
+    return;
+  }
+  // Ambos regulares
+  const diff = Math.abs(r1.k - r2.k);
+  if (diff <= 1e-6){
+    prop_res2.innerHTML = `✅ Proporcional: k₁ = ${arred2(r1.k)}, k₂ = ${arred2(r2.k)} ⇒ k ≈ ${arred2((r1.k+r2.k)/2)}.`;
+  } else {
+    prop_res2.innerHTML = `❌ Não é proporcional: k₁ = ${arred2(r1.k)} e k₂ = ${arred2(r2.k)} diferem.`;
+  }
+}
+
+function regraDeTres(){
+  const a = parseFloat(prop_a.value);
+  const b = parseFloat(prop_b.value);
+  const c = parseFloat(prop_c.value);
+  if (![a,b,c].every(Number.isFinite) || Math.abs(a) <= EPS){
+    prop_res3.innerHTML = '<span class="no">Preencha a, b, c e garanta que a ≠ 0.</span>';
+    return;
+  }
+  const x = (b*c)/a;
+  prop_res3.innerHTML = `
+    <div><b>Regra de três (direta):</b> a : b = c : x ⇒ x = (b·c)/a</div>
+    <div>x = (${arred2(b)}·${arred2(c)}) / ${arred2(a)} = <b>${arred2(x)}</b></div>
+  `;
+}
+
+function gerarTabelaProporcional(){
+  const k = parseFloat(prop_k.value);
+  if (!Number.isFinite(k)){
+    prop_tab.innerHTML = '<span class="no">Defina k para gerar a tabela.</span>';
+    return;
+  }
+  let xi = parseFloat(prop_xini.value);
+  let xf = parseFloat(prop_xfim.value);
+  let p = parseFloat(prop_passo.value);
+  if (![xi,xf,p].every(Number.isFinite) || Math.abs(p) <= EPS){
+    prop_tab.innerHTML = '<span class="no">Verifique x inicial, x final e o passo (passo ≠ 0).</span>';
+    return;
+  }
+  const dir = xf >= xi ? 1 : -1;
+  p = Math.abs(p) * dir;
+  let x = xi, count = 0;
+  let html = '';
+  html += '<div class="list">';
+  while ((dir > 0 ? x <= xf + 1e-12 : x >= xf - 1e-12) && count < 1000){
+    const y = k*x;
+    html += `
+      <div class="row">
+        <div>x = <b>${arred2(x)}</b></div>
+        <div class="muted">y = ${arred2(y)}</div>
+      </div>
+    `;
+    x += p; count++;
+  }
+  html += '</div>';
+  prop_tab.innerHTML = html || '<span class="muted">Sem pontos.</span>';
+}
+
+prop_calc?.addEventListener('click', calcProporcional);
+prop_limpar?.addEventListener('click', () => {
+  [prop_k,prop_x,prop_x1,prop_y1,prop_x2,prop_y2,prop_a,prop_b,prop_c,prop_xini,prop_xfim,prop_passo].forEach(i => i && (i.value = ''));
+  prop_res.innerHTML = 'Informe k e x.';
+  prop_res2.innerHTML = 'Preencha um par para calcular k, ou dois pares para testar.';
+  prop_res3.innerHTML = 'Interpretação: a está para b assim como c está para x. Se são grandezas diretamente proporcionais, x = (b · c) / a.';
+  prop_tab.innerHTML = 'A tabela usa o k atual.';
+});
+prop_k_btn?.addEventListener('click', calcK);
+prop_test_btn?.addEventListener('click', testProporcional);
+prop_regra3?.addEventListener('click', regraDeTres);
+prop_tabela?.addEventListener('click', gerarTabelaProporcional);
     });
   </script>
 </body>

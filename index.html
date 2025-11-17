@@ -152,11 +152,50 @@ object-fit: contain; / a imagem se ajusta sem cortar /
 display: block;
 border-radius: 10px; / arredonda um pouquinho, opcional */
 }
+    .corner-logo{
+  position: absolute;
+  top: 12px;           /* distância do topo do header */
+  right: 20px;         /* distância da borda direita do container */
+  width: 84px;
+  height: 84px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.16);
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow);
+  z-index: 30;
+}
+.corner-logo img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* reserva espaço à direita em telas maiores, para o conteúdo não encostar no logo */
+@media (min-width: 901px){
+  header{ padding-right: 120px; } /* ajuste se mudar o tamanho do logo */
+}
+
+/* em telas menores, diminui o logo e aproxima das bordas */
+@media (max-width: 900px){
+  .corner-logo{
+    width: 56px;
+    height: 56px;
+    top: 8px;
+    right: 12px;
+  }
+}
   </style>
 </head>
 <body>
   <header>
     <div class="container">
+         <!-- LOGO no canto superior direito -->
+    <a class="corner-logo" href="#topo" aria-label="Matemática em Ação">
+      <img src="img/logo-matematica.png" alt="Matemática em Ação — logo">
+    </a>
       <div class="brand">
         <div class="logo"> <img src="img/logo-matematica.png" alt="Matemática em Ação — logo" loading="eager" decoding="async"> </div>
         <div>

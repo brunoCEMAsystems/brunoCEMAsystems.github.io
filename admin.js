@@ -91,4 +91,3 @@ async function loginUsuario() {
   }
 }
 
-window.history.replaceState({}, "", "/painel");

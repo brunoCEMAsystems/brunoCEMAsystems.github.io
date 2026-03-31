@@ -32,7 +32,9 @@ async function carregarCatalogo() {
             <img src="${item.imagem_url}" width="150">
             <h3>${item.nome}</h3>
             <p class="preco-destaque">${precoFormatado}</p>
-            <p>${item.categoria}</p>
+            <p class="uppercase">${item.categoria}</p>
+            <p>Estoque:</p>
+            <p>${item.estoque}</p>
         `;
     vitrine.appendChild(div);
   });

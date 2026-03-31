@@ -8,6 +8,7 @@ async function cadastrarProduto() {
   // Captura os valores digitados no HTML
   let nomeProduto = document.getElementById("input-nome").value;
   let precoProduto = document.getElementById("input-preco").value;
+  let estoqueProduto = document.getElementById("input-estoque").value;
   let nomeCategoria = document.getElementById("input-categoria").value;
   let imagemProduto = document.getElementById("input-imagem").value;
   let aviso = document.getElementById("mensagem-aviso");
@@ -27,6 +28,7 @@ async function cadastrarProduto() {
     {
       nome: nomeProduto,
       preco: precoProduto,
+      estoque: estoqueProduto,
       categoria: nomeCategoria,
       imagem_url: imagemProduto,
     },
@@ -43,6 +45,7 @@ async function cadastrarProduto() {
     // Limpa as caixas de texto para o próximo cadastro
     document.getElementById("input-nome").value = "";
     document.getElementById("input-preco").value = "";
+    document.getElementById("input-estoque").value = "";
     document.getElementById("input-categoria").value = "";
     document.getElementById("input-imagem").value = "";
   }
@@ -69,6 +72,8 @@ async function deletarProduto() {
   } else {
     aviso.innerText = "Produto deletado com sucesso!";
     aviso.style.color = "green";
+
+    document.getElementById("input-nome").value = "";
   }
 }
 
@@ -90,4 +95,3 @@ async function loginUsuario() {
     window.location.href = "admin.html";
   }
 }
-

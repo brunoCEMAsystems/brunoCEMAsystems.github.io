@@ -79,8 +79,8 @@ async function loginUsuario() {
   const { error } = await banco
     .from("usuarios")
     .select("*")
-    .eq("usuario", nomeUser)
-    .eq("senha", senhaUser)
+    .eq("usuario", nomeUser) //Usuário: sa
+    .eq("senha", senhaUser) // Senha: 1234
     .single();
 
   if (error) {

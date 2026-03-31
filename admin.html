@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Painel Administrativo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body class="admin-body">
+    <div class="painel-container">
+      <h2>Cadastrar Novo Produto</h2>
+      <button onclick="window.location.href='index.html'">Produtos</button>
+
+      <div class="form-grupo">
+        <label>Nome do Produto (APENAS LETRAS MINÚSCULAS):</label>
+        <input type="text" id="input-nome" placeholder="Ex: maça" />
+      </div>
+
+      <div class="form-grupo">
+        <label>Preço (Apenas números e ponto):</label>
+        <input
+          type="number"
+          id="input-preco"
+          step="0.01"
+          placeholder="Ex: 199.90"
+        />
+      </div>
+      <div class="form-grupo">
+        <label>Categoria do Produto:</label>
+        <input type="text" id="input-categoria" placeholder="Ex: Fruta" />
+      </div>
+
+      <div class="form-grupo">
+        <label>Caminho da Imagem:</label>
+        <input type="text" id="input-imagem" placeholder="Ex: img/maca.png" />
+      </div>
+
+      <button onclick="cadastrarProduto()">Salvar no Banco</button>
+      <p id="mensagem-aviso"></p>
+
+      <button onclick="deletarProduto()">Deletar do Banco</button>
+      <p id="delete-aviso"></p>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

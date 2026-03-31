@@ -90,3 +90,5 @@ async function loginUsuario() {
     window.location.href = "admin.html";
   }
 }
+
+window.history.replaceState({}, "", "/painel");

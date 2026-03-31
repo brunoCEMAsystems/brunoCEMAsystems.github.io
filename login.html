@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Faça login para prosseguir</h1>
+    </header>
+    <div class="form-grupo">
+      <label>Nome de usuário:</label>
+      <input type="text" id="input-user" placeholder="Insira seu usuário..." />
+    </div>
+    <div class="form-grupo">
+      <label>Senha de usuário:</label>
+      <input type="text" id="input-senha" placeholder="Insira sua senha..." />
+    </div>
+    <button onclick="loginUsuario()">Painel de controle</button>
+    <script src="admin.js"></script>
+  </body>
+</html>

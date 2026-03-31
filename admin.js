@@ -71,3 +71,22 @@ async function deletarProduto() {
     aviso.style.color = "green";
   }
 }
+
+async function loginUsuario() {
+  let nomeUser = document.getElementById("input-user").value;
+  let senhaUser = document.getElementById("input-senha").value;
+
+  const { error } = await banco
+    .from("usuarios")
+    .select("*")
+    .eq("usuario", nomeUser)
+    .eq("senha", senhaUser)
+    .single();
+
+  if (error) {
+    alert("Usuário ou senha incorretos!");
+    console.error("Erro na autenticação:", error?.message);
+  } else {
+    window.location.href = "admin.html";
+  }
+}

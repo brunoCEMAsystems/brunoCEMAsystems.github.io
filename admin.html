@@ -12,7 +12,6 @@
   <body class="admin-body">
     <div class="painel-container">
       <h2>Cadastrar Novo Produto</h2>
-      <button onclick="window.location.href='index.html'">Produtos</button>
 
       <div class="form-grupo">
         <label>Nome do Produto (APENAS LETRAS MINÚSCULAS):</label>
@@ -47,8 +46,11 @@
 
       <button onclick="deletarProduto()">Deletar do Banco</button>
       <p id="delete-aviso"></p>
-    </div>
 
+      <button onclick="window.location.href='index.html'" class="voltar-produtos">
+          Voltar aos Produtos
+      </button>
+    </div>
     <script src="admin.js"></script>
   </body>
 </html>

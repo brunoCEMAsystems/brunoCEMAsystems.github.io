@@ -1,11 +1,10 @@
-// 1. CONFIGURAÇÃO DO BANCO (Igual fizemos na Fase 1)
+//==========FUNÇÃO PARA CADASTRAR PRODUTO==========//
+
 const supabaseUrl = "https://orqntyflqgnvslrpwfft.supabase.co";
 const supabaseKey = "sb_publishable_jv3kIbTmNWn0rcErfz2FNQ_naG9Cmh7";
 const banco = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// 2. FUNÇÃO DE CADASTRO
 async function cadastrarProduto() {
-  // Captura os valores digitados no HTML
   let nomeProduto = document.getElementById("input-nome").value;
   let precoProduto = document.getElementById("input-preco").value;
   let estoqueProduto = document.getElementById("input-estoque").value;
@@ -13,7 +12,6 @@ async function cadastrarProduto() {
   let imagemProduto = document.getElementById("input-imagem").value;
   let aviso = document.getElementById("mensagem-aviso");
 
-  // Validação de segurança básica
   if (nomeProduto === "" || precoProduto === "") {
     aviso.innerText = "Preencha todos os campos!";
     aviso.style.color = "red";
@@ -23,7 +21,6 @@ async function cadastrarProduto() {
   aviso.innerText = "Salvando na nuvem...";
   aviso.style.color = "blue";
 
-  // Envia o comando INSERT para a tabela 'produtos' no Supabase
   let { error } = await banco.from("produtos").insert([
     {
       nome: nomeProduto,
@@ -34,7 +31,6 @@ async function cadastrarProduto() {
     },
   ]);
 
-  // Verifica se deu erro ou se foi sucesso
   if (error) {
     aviso.innerText = "Erro ao salvar: " + error.message;
     aviso.style.color = "red";
@@ -42,7 +38,6 @@ async function cadastrarProduto() {
     aviso.innerText = "Produto cadastrado com sucesso!";
     aviso.style.color = "green";
 
-    // Limpa as caixas de texto para o próximo cadastro
     document.getElementById("input-nome").value = "";
     document.getElementById("input-preco").value = "";
     document.getElementById("input-estoque").value = "";
@@ -50,6 +45,8 @@ async function cadastrarProduto() {
     document.getElementById("input-imagem").value = "";
   }
 }
+
+//==========FUNÇÃO PARA DELETAR PRODUTO===========//
 
 async function deletarProduto() {
   let nomeProduto = document.getElementById("input-nome").value;
@@ -74,8 +71,11 @@ async function deletarProduto() {
     aviso.style.color = "green";
 
     document.getElementById("input-nome").value = "";
+    document.getElementById("delete-aviso").value = "";
   }
 }
+
+//==========FUNÇÃO PARA LOGIN==========//
 
 async function loginUsuario() {
   let nomeUser = document.getElementById("input-user").value;
@@ -93,5 +93,50 @@ async function loginUsuario() {
     console.error("Erro na autenticação:", error?.message);
   } else {
     window.location.href = "admin.html";
+  }
+}
+
+//==========FUNÇÃO PARA CADASTRAR CLIENTE==========//
+
+async function cadastrarCliente() {
+  let nomeCliente = document.getElementById("nome-cliente").value;
+  let emailCliente = document.getElementById("email-cliente").value;
+  let cpfCliente = document.getElementById("cpf-cliente").value;
+  let telefoneCliente = document.getElementById("telefone-cliente").value;
+  let nascimentoCliente = document.getElementById("nascimento-cliente").value;
+  let avisoCliente = document.getElementById("mensagem-cliente");
+
+  if (nomeCliente === "" || nascimentoCliente === "" || cpfCliente === "") {
+    avisoCliente.innerText = "Preencha o nome, CPF e a data de nascimento!";
+    avisoCliente.style.color = "red";
+    return;
+  }
+
+  avisoCliente.innerText = "Salvando na nuvem...";
+  avisoCliente.style.color = "blue";
+
+  const { error } = await banco.from("clientes").insert([
+    {
+      nome: nomeCliente,
+      email: emailCliente,
+      cpf_cnpj: cpfCliente,
+      telefone: telefoneCliente,
+      data_nascimento: nascimentoCliente,
+    },
+  ]);
+
+  if (error) {
+    avisoCliente.innerText = "Erro ao salvar: " + error.message;
+    avisoCliente.style.color = "red";
+  } else {
+    avisoCliente.innerText = "Cliente cadastrado com sucesso!";
+    avisoCliente.style.color = "green";
+
+    document.getElementById("nome-cliente").value = "";
+    document.getElementById("email-cliente").value = "";
+    document.getElementById("cpf-cliente").value = "";
+    document.getElementById("telefone-cliente").value = "";
+    document.getElementById("nascimento-cliente").value = "";
+    document.getElementById("mensagem-cliente").value = "";
   }
 }

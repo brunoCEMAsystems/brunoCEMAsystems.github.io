@@ -1,157 +1,239 @@
-/* Reseta padrões e define tipografia */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Inter", sans-serif;
-}
+/*RESET E CONFIGURAÇÕES GLOBAIS*/
 
-body {
-  background-color: #000;
-  color: #fff;
-  padding: 40px;
-  line-height: 1.6;
-}
-.uppercase {
-  text-transform: capitalize;
-}
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+  }
+  
+  body {
+    background-color: #000;
+    color: #fff;
+    padding: 40px;
+    line-height: 1.6;
+  }
+  
+  /*CLASSES UTILITÁRIAS*/
+  
+  .uppercase {
+    text-transform: capitalize;
+  }
+  
+  /*HEADER (Outras Páginas)*/
+  
+  header {
+    border: 1px solid #fff;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  
+  header h1 {
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
 
-body button {
-  font-size: 1.2rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
+  header button {
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
 
-header {
-  border: 1px solid #fff;
-  padding: 20px;
-  margin-bottom: 30px;
-}
-
-header h1 {
-  font-size: 1.2rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-/* Grid de Produtos (ID vitrine no HTML) */
-.grid-produtos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-/* Card de Produto (Classe gerada pelo JS) */
-.card-produto {
-  border: 1px solid #fff;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  transition: background 0.3s ease;
-}
-
-.card-produto:hover {
-  background: #1a1a1a;
-}
-
-.card-produto img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  margin-bottom: 15px;
-}
-
-.card-produto h3 {
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-}
-
-.card-produto p {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-top: auto; /* Alinha o preço sempre ao fundo do card */
-}
-
-/* --- Estilos do Painel Administrativo --- */
-
-.admin-body {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-}
-
-.painel-container {
-  width: 100%;
-  max-width: 500px;
-  border: 1px solid #fff;
-  padding: 30px;
-  background-color: #000;
-}
-
-.painel-container h2 {
-  font-size: 1.2rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #333;
-  padding-bottom: 10px;
-}
-
-.form-grupo {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-grupo label {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-  color: #ccc;
-}
-
-.form-grupo input {
-  background: transparent;
-  border: 1px solid #fff;
-  padding: 12px;
-  color: #fff;
-  font-size: 1rem;
-  outline: none;
-  transition: background 0.3s;
-}
-
-.form-grupo input:focus {
-  background: #1a1a1a;
-}
-
-/* Estilo do Botão Salvar */
-.painel-container button {
-  width: 100%;
-  padding: 15px;
-  background: #fff;
-  color: #000;
-  border: none;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: opacity 0.3s;
-  margin-top: 10px;
-}
-
-.painel-container button:hover {
-  opacity: 0.8;
-}
-
-/* Mensagem de Feedback (Erro ou Sucesso) */
-#mensagem-aviso {
-  margin-top: 15px;
-  font-size: 0.9rem;
-  text-align: center;
-  min-height: 1.2em;
-}
+  button {
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  
+  /*GRID DE PRODUTOS - VITRINE (Outras Páginas)*/
+  
+  .grid-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  /*CARD DE PRODUTO (Outras Páginas)*/
+  
+  .card-produto {
+    border: 1px solid #fff;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s ease;
+  }
+  
+  .card-produto:hover {
+    background: #1a1a1a;
+  }
+  
+  .card-produto img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+  
+  .card-produto h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  
+  .card-produto p {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: auto;
+  }
+  
+  /*PAINEL ADMINISTRATIVO - LAYOUT*/
+  
+  .admin-body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    min-height: 100vh;
+  }
+  
+  .painel-container {
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid #fff;
+    padding: 30px;
+    background-color: #000;
+  }
+  
+  .painel-container h2 {
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+  }
+  
+  /*PAINEL ADMINISTRATIVO - FORMULÁRIOS*/
+  
+  .form-grupo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-grupo label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: #ccc;
+  }
+  
+  .form-grupo input {
+    background: transparent;
+    border: 1px solid #fff;
+    padding: 12px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: background 0.3s;
+  }
+  
+  .form-grupo input:focus {
+    background: #1a1a1a;
+  }
+  
+  .form-grupo input::placeholder {
+    color: #666;
+  }
+  
+  /*PAINEL ADMINISTRATIVO - BOTÕES*/
+  
+  .botoes-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .painel-container button {
+    width: 100%;
+    padding: 15px;
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: opacity 0.3s, background 0.3s, color 0.3s;
+  }
+  
+  .painel-container button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Botão Deletar - Estilo Vermelho */
+  .painel-container .btn-deletar {
+    background: #dc3545;
+    color: #fff;
+  }
+  
+  .painel-container .btn-deletar:hover {
+    background: #c82333;
+  }
+  
+  /* Botão Voltar - Estilo Secundário */
+  .painel-container .btn-voltar {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+  }
+  
+  .painel-container .btn-voltar:hover {
+    background: #fff;
+    color: #000;
+  }
+  
+  /*PAINEL ADMINISTRATIVO - MENSAGENS DE FEEDBACK*/
+  
+  #mensagem-aviso,
+  #delete-aviso,
+  #mensagem-cliente {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    text-align: center;
+    min-height: 1.2em;
+  }
+  
+  /*Classes para mensagens de sucesso e erro*/
+  .sucesso {
+    color: #28a745;
+  }
+  
+  .erro {
+    color: #dc3545;
+  }
+  
+  /*RESPONSIVIDADE*/
+  
+  @media (max-width: 600px) {
+    body {
+      padding: 20px;
+    }
+  
+    .painel-container {
+      padding: 20px;
+    }
+  
+    .painel-container h2 {
+      font-size: 1rem;
+    }
+  }

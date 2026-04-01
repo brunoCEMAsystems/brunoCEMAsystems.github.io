@@ -2,58 +2,95 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Painel Administrativo</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       window.history.replaceState({}, "", "/painel");
+      if (document.referrer === "login.html" || !document.referrer.includes("login-page"))
+        { window.location.href = "index.html"; }
     </script>
   </head>
+
   <body class="admin-body">
+    
+    <!-- ==================== PAINEL DE PRODUTOS ==================== -->
     <div class="painel-container">
       <h2>Cadastrar Novo Produto</h2>
 
       <div class="form-grupo">
-        <label>Nome do Produto (APENAS LETRAS MINÚSCULAS):</label>
-        <input type="text" id="input-nome" placeholder="Ex: maça" />
+        <label for="input-nome">Nome do Produto (APENAS LETRAS MINÚSCULAS):</label>
+        <input type="text" id="input-nome" placeholder="Ex: maçã" />
       </div>
 
       <div class="form-grupo">
-        <label>Preço (Apenas números e ponto):</label>
-        <input
-          type="number"
-          id="input-preco"
-          step="0.01"
-          placeholder="Ex: 199.90"
-        />
+        <label for="input-preco">Preço (Apenas números e ponto):</label>
+        <input type="number" id="input-preco" step="0.01" placeholder="Ex: 199.90" />
       </div>
+
       <div class="form-grupo">
-        <label>Estoque (Apenas números):</label>
+        <label for="input-estoque">Estoque (Apenas números):</label>
         <input type="number" id="input-estoque" step="1" placeholder="Ex: 5" />
       </div>
+
       <div class="form-grupo">
-        <label>Categoria do Produto:</label>
+        <label for="input-categoria">Categoria do Produto:</label>
         <input type="text" id="input-categoria" placeholder="Ex: Fruta" />
       </div>
 
       <div class="form-grupo">
-        <label>Caminho da Imagem:</label>
+        <label for="input-imagem">Caminho da Imagem:</label>
         <input type="text" id="input-imagem" placeholder="Ex: img/maca.png" />
       </div>
 
-      <button onclick="cadastrarProduto()">Salvar no Banco</button>
+      <div class="botoes-grupo">
+        <button onclick="cadastrarProduto()">Salvar no Banco</button>
+        <button onclick="deletarProduto()" class="btn-deletar">Deletar do Banco</button>
+        <button onclick="window.location.href='index.html'" class="btn-voltar">Voltar aos Produtos</button>
+      </div>
+
       <p id="mensagem-aviso"></p>
-
-      <button onclick="deletarProduto()">Deletar do Banco</button>
       <p id="delete-aviso"></p>
-
-      <button
-        onclick="window.location.href='index.html'"
-        class="voltar-produtos"
-      >
-        Voltar aos Produtos
-      </button>
     </div>
+
+    <!-- ==================== PAINEL DE CLIENTES ==================== -->
+    <div class="painel-container">
+      <h2>Cadastrar Novo Cliente</h2>
+
+      <div class="form-grupo">
+        <label for="nome-cliente">Nome do Cliente:</label>
+        <input type="text" id="nome-cliente" placeholder="Nome..." />
+      </div>
+
+      <div class="form-grupo">
+        <label for="email-cliente">Email do Cliente:</label>
+        <input type="email" id="email-cliente" placeholder="Email..." />
+      </div>
+
+      <div class="form-grupo">
+        <label for="cpf-cliente">CPF/CNPJ do Cliente:</label>
+        <input type="text" id="cpf-cliente" placeholder="000.000.000-00" />
+      </div>
+
+      <div class="form-grupo">
+        <label for="telefone-cliente">Telefone do Cliente:</label>
+        <input type="tel" id="telefone-cliente" placeholder="(00) 00000-0000" />
+      </div>
+
+      <div class="form-grupo">
+        <label for="nascimento-cliente">Data de nascimento do Cliente:</label>
+        <input type="date" id="nascimento-cliente" />
+      </div>
+
+      <div class="botoes-grupo">
+        <button onclick="cadastrarCliente()">Salvar Cliente</button>
+        <button onclick="deletarCliente()" class="btn-deletar">Deletar Cliente</button>
+      </div>
+
+      <p id="mensagem-cliente"></p>
+    </div>
+
     <script src="admin.js"></script>
   </body>
 </html>

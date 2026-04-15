@@ -16,6 +16,21 @@
         Painel de controle
       </button>
     </header>
+    <section class="carrinho-container">
+      <h2>🛍️ Meu Carrinho</h2>
+      <ul id="lista-carrinho">
+        <p>Seu carrinho está vazio.</p>
+      </ul>
+      <div class="carrinho-total">
+        <strong>Total: <span id="valor-total">R$ 0,00</span></strong>
+      </div>
+      <button onclick="finalizarCompra()" class="btn-finalizar">
+        Finalizar Pedido
+      </button>
+      <button onclick="esvaziarCarrinho()" class="btn-limpar">
+        Limpar Carrinho
+      </button>
+    </section>
 
     <div id="vitrine" class="grid-produtos"></div>
 
